@@ -26,15 +26,49 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { firstName, lastName, dob, email, password1, password2, phone } = createUserDto;
+    try {
+      const { firstName, lastName, email, password1, password2, dob, phone } = createUserDto
 
-    const user = await this.userModel.findOne({ email: email });
+      const isExist = await this.isEmailExist(email)
+      if (isExist) {
+        throw new BadRequestException('Email already exists')
+      }
 
-    if (user) {
-      throw new Error('User already exists');
+      if (password1 !== password2) {
+        throw new BadRequestException('Password not match')
+      }
+
+      const isPhone = await this.userModel.findOne({ phone })
+      if (isPhone) {
+        throw new BadRequestException('Phone already exists')
+      }
+
+      if (phone.length !== 10) {
+        throw new BadRequestException('Phone number must be 10 digits')
+      }
+
+      const hashPassword = await hashPasswordHelper(password1)
+      const codeId = uuidv4()
+
+      const user = await this.userModel.create({
+        firstName,
+        lastName,
+        email,
+        password: hashPassword,
+        dob,
+        phone,
+        isActive: false,
+        codeId: codeId,
+        codeExpired: dayjs().add(5, 'minute')
+      })
+
+      return {
+        _id: user._id,
+      }
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException('internal server error')
     }
-
-    return 'This action adds a new user';
   }
 
   async findByEmail(email: string) {
