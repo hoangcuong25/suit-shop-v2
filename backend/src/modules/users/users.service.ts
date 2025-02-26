@@ -130,4 +130,12 @@ export class UsersService {
       throw new BadRequestException('internal server error')
     }
   }
+
+  async findAll() {
+    return await this.userModel.find()
+  }
+
+  async getProfile(req) {
+    return await this.userModel.findById(req._id)
+  }
 }

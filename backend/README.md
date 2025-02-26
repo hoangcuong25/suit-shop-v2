@@ -69,6 +69,14 @@ $ npm install -g mau
 $ mau deploy
 ```
 
+PORT=4000
+MONGODB_URI=mongodb+srv://vancuong25112003:PCiD4NOCXSdn5TyX@cluster0.fz8no.mongodb.net/suit-shop-v2
+JWT_SECRET_KEY=secretkey
+JWT_ACCESS_TOKEN_EXPIRED=10d
+MAIL_USER=vancuong251103@gmail.com
+MAIL_PASSWORD=gwxkebbogsxnhxgz
+
+
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
 ## Resources
