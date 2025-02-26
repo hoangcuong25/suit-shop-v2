@@ -8,20 +8,25 @@ import { Public } from 'src/decorator/customize';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @Post()
+  @Post('create')
   @Public()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
+  @Get('find-all')
   @Public()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get('/get-profile')
+  @Get('get-profile')
   getProfile(@Req() req) {
     return this.usersService.getProfile(req.user)
+  }
+
+  @Patch('update-profile')
+  updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateProfile(req.user, updateUserDto)
   }
 }

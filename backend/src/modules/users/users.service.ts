@@ -138,4 +138,23 @@ export class UsersService {
   async getProfile(req) {
     return await this.userModel.findById(req._id)
   }
+
+  async updateProfile(req, updateUserDto) {
+    const { firstName, lastName, phone, dob } = updateUserDto
+    const user = await this.userModel.findById(req._id)
+
+    if (!user) {
+      throw new BadRequestException('User not found')
+    }
+
+    user.firstName = firstName
+    user.lastName = lastName
+    user.phone = phone
+    user.dob = dob
+    await user.save()
+
+    return {
+      success: true
+    }
+  }
 }
