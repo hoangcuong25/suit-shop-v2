@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './passport/local-auth.guard';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Public } from 'src/decorator/customize';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService
+    // private readonly mailerService: MailerService,
+  ) { }
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('login')
+  @Public()
+  @UseGuards(LocalAuthGuard)
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('register')
+  @Public()
+  register(@Body() registerDto: CreateAuthDto) {
+    return this.authService.handleRegister(registerDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Get('mail')
+  // @Public()
+  // sendMail() {
+  //   this.mailerService
+  //     .sendMail({
+  //       to: 'cuongpro1t123@gmail.com', // list of receivers
+  //       subject: 'Testing Nest MailerModule ✔', // Subject line
+  //       text: 'welcome', // plaintext body
+  //       template: "register",
+  //       context: {
+  //         name: "cuong hoang",
+  //         activationCode: 123456789
+  //       }
+  //     })
+  //   return "ok";
+  // }
 }

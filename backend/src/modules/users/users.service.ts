@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schems';
 import { InjectModel } from '@nestjs/mongoose';
+import { CreateAuthDto } from '../auth/dto/create-auth.dto';
+import { hashPasswordHelper } from 'src/helpers/util';
+import { v4 as uuidv4 } from 'uuid';
+import { MailerService } from '@nestjs-modules/mailer';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
@@ -11,9 +15,15 @@ export class UsersService {
   constructor(
     @InjectModel('User')
     private userModel: Model<User>,
-
-    // private readonly mailerService: MailerService
+    private readonly mailerService: MailerService
   ) { }
+
+  isEmailExist = async (email: string) => {
+    const user = await this.userModel.exists({ email })
+
+    if (user) return true
+    return false
+  }
 
   async create(createUserDto: CreateUserDto) {
     const { firstName, lastName, dob, email, password1, password2, phone } = createUserDto;
@@ -27,19 +37,63 @@ export class UsersService {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findByEmail(email: string) {
+    return await this.userModel.findOne({ email })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async handleRegister(registerDto: CreateAuthDto) {
+    try {
+      const { firstName, lastName, email, password1, password2, dob, phone } = registerDto
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+      const isExist = await this.isEmailExist(email)
+      if (isExist) {
+        throw new BadRequestException('Email already exists')
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+      if (password1 !== password2) {
+        throw new BadRequestException('Password not match')
+      }
+
+      const isPhone = await this.userModel.findOne({ phone })
+      if (isPhone) {
+        throw new BadRequestException('Phone already exists')
+      }
+
+      if (phone.length !== 10) {
+        throw new BadRequestException('Phone number must be 10 digits')
+      }
+
+      const hashPassword = await hashPasswordHelper(password1)
+      const codeId = uuidv4()
+
+      const user = await this.userModel.create({
+        firstName,
+        lastName,
+        email,
+        password: hashPassword,
+        dob,
+        phone,
+        isActive: false,
+        codeId: codeId,
+        codeExpired: dayjs().add(5, 'minute')
+      })
+
+      this.mailerService.sendMail({
+        to: user.email, // list of receivers
+        subject: 'Activate your account', // Subject line
+        template: "register",
+        context: {
+          name: `${user.firstName} ${user.lastName}`,
+          activationCode: codeId
+        }
+      })
+
+      return {
+        _id: user._id,
+      }
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException('internal server error')
+    }
   }
 }
