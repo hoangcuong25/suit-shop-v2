@@ -46,4 +46,9 @@ export class AuthController {
       })
     return "ok";
   }
+
+  @Post('logout')
+  logout(@Req() req) {
+    return this.authService.logout(req)
+  }
 }

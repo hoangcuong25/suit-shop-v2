@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { comparePasswordHelper } from 'src/helpers/util';
 import { JwtService } from '@nestjs/jwt';
@@ -72,5 +72,21 @@ export class AuthService {
 
   handleRegister = async (registerDto: CreateAuthDto) => {
     return await this.usersService.handleRegister(registerDto)
+  }
+
+  async logout(req) {
+    try {
+      const access_token = req.headers.authorization?.split(' ')[1]
+
+      if (access_token) {
+        const decoded = this.jwtService.verify(access_token, { secret: this.configService.get<string>("JWT_ACCESS_TOKEN_SECRET") })
+        await this.redis.del(`refresh_token:${decoded._id}`);
+      }
+
+      return 'ok'
+    }
+    catch {
+      throw new UnauthorizedException
+    }
   }
 }
