@@ -7,6 +7,7 @@ import { LocalStrategy } from './passport/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './passport/jwt.strategy';
+import ms from 'ms';
 
 @Module({
   controllers: [AuthController],
@@ -17,9 +18,9 @@ import { JwtStrategy } from './passport/jwt.strategy';
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         global: true,
-        secret: configService.get<string>('JWT_SECRET_KEY'),
+        secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_ACCESS_TOKEN_EXPIRED'),
+          expiresIn: ms(configService.get<string>('JWT_ACCESS_EXPIRE') as ms.StringValue) / 1000,
         },
       }),
       inject: [ConfigService],

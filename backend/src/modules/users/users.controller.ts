@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/decorator/customize';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
@@ -26,7 +27,12 @@ export class UsersController {
   }
 
   @Patch('update-profile')
-  updateProfile(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateProfile(req.user, updateUserDto)
+  @UseInterceptors(FileInterceptor('file'))
+  updateProfile(
+    @Req() req,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    return this.usersService.updateProfile(req.user, updateUserDto, file)
   }
 }

@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +16,12 @@ export class AuthController {
   @Post('login')
   @Public()
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  @ResponseMessage("User Login")
+  async login(
+    @Req() req,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    return this.authService.login(req.user, response);
   }
 
   @Post('register')

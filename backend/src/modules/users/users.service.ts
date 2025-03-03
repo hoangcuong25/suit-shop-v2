@@ -139,7 +139,7 @@ export class UsersService {
     return await this.userModel.findById(req._id)
   }
 
-  async updateProfile(req, updateUserDto) {
+  async updateProfile(req, updateUserDto, file) {
     const { firstName, lastName, phone, dob } = updateUserDto
     const user = await this.userModel.findById(req._id)
 

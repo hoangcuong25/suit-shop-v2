@@ -10,13 +10,16 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/passport/jwt-auth.guard';
+import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 
 @Module({
   imports: [
     UsersModule,
     ProductsModule,
     AuthModule,
+
     ConfigModule.forRoot({ isGlobal: true }), // load .env
+
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -24,6 +27,7 @@ import { JwtAuthGuard } from './modules/auth/passport/jwt-auth.guard';
       }),
       inject: [ConfigService],
     }),
+
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -51,8 +55,17 @@ import { JwtAuthGuard } from './modules/auth/passport/jwt-auth.guard';
         },
       }),
       inject: [ConfigService],
-
     }),
+
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService): Promise<RedisModuleOptions> => ({
+        type: 'single',
+        url: configService.get<string>('UPSTASH_REDIS_URL') || '',
+      }),
+      inject: [ConfigService],
+    }),
+
   ],
   controllers: [AppController],
   providers: [
