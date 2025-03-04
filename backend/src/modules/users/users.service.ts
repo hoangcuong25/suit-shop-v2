@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { User } from './schemas/user.schems';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateAuthDto } from '../auth/dto/create-auth.dto';
-import { hashPasswordHelper } from 'src/helpers/util';
+import { comparePasswordHelper, hashPasswordHelper } from 'src/helpers/util';
 import { v4 as uuidv4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
 import dayjs from 'dayjs';
@@ -164,6 +164,32 @@ export class UsersService {
 
   async updatePhone(req, phone) {
     await this.userModel.findByIdAndUpdate(req._id, { phone: phone })
+    return 'ok'
+  }
+
+  async updatePassword(req, reqBody) {
+    const { newPassword1, newPassword2, oldPassword } = reqBody
+
+    const user = await this.userModel.findById(req._id)
+
+    if (!user) {
+      throw new BadRequestException('User not found')
+    }
+
+    const isOldPasswordValid = await comparePasswordHelper(oldPassword, user.password)
+
+    if (!isOldPasswordValid) {
+      throw new BadRequestException('Incorrect old password')
+    }
+
+    if (newPassword1 !== newPassword2) {
+      throw new BadRequestException('New passwords do not match')
+    }
+
+    const hashedPassword = await hashPasswordHelper(newPassword1)
+
+    await this.userModel.findByIdAndUpdate(req._id, { password: hashedPassword })
+
     return 'ok'
   }
 }

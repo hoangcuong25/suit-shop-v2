@@ -49,4 +49,17 @@ export class UsersController {
   ) {
     return this.usersService.updatePhone(req.user, reqBody.phone)
   }
+
+  @Patch('update-password')
+  @ResponseMessage("Update Password")
+  updatePassword(
+    @Req() req,
+    @Body() reqBody: {
+      newPassword1: string,
+      newPassword2: string,
+      oldPassword: string
+    }
+  ) {
+    return this.usersService.updatePassword(req.user, reqBody)
+  }
 }
