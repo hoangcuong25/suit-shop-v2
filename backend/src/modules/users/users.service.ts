@@ -8,6 +8,7 @@ import { hashPasswordHelper } from 'src/helpers/util';
 import { v4 as uuidv4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
 import dayjs from 'dayjs';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,8 @@ export class UsersService {
   constructor(
     @InjectModel('User')
     private userModel: Model<User>,
-    private readonly mailerService: MailerService
+    private readonly mailerService: MailerService,
+    private readonly cloudinaryService: CloudinaryService
   ) { }
 
   isEmailExist = async (email: string) => {
@@ -140,21 +142,23 @@ export class UsersService {
   }
 
   async updateProfile(req, updateUserDto, file) {
-    const { firstName, lastName, phone, dob } = updateUserDto
+    const { firstName, lastName, dob, gender, address } = updateUserDto
     const user = await this.userModel.findById(req._id)
 
     if (!user) {
       throw new BadRequestException('User not found')
     }
 
-    user.firstName = firstName
-    user.lastName = lastName
-    user.phone = phone
-    user.dob = dob
-    await user.save()
+    await this.userModel.findByIdAndUpdate(req._id, { firstName, lastName, dob, gender, address })
 
-    return {
-      success: true
+    if (file) {
+      // upload image to cloudinary
+      const imageUpload = await this.cloudinaryService.uploadFile(file)
+      const imageUrl = imageUpload.url
+
+      await this.userModel.findByIdAndUpdate(req._id, { image: imageUrl })
     }
+
+    return 'ok'
   }
 }

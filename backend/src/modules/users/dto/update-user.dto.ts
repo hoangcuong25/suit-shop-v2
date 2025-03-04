@@ -12,9 +12,9 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @IsNotEmpty({ message: 'Date of birth cannot be empty' })
     dob: string
 
-    @IsNotEmpty({ message: 'Gender number cannot be empty' })
+    @IsNotEmpty({ message: 'Gender cannot be empty' })
     gender: string;
 
-    @IsNotEmpty({ message: 'Address number cannot be empty' })
+    @IsNotEmpty({ message: 'Address cannot be empty' })
     address: string;
 }
