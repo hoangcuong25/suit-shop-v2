@@ -11,14 +11,16 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/passport/jwt-auth.guard';
 import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // load .env
+
     UsersModule,
     ProductsModule,
     AuthModule,
-
-    ConfigModule.forRoot({ isGlobal: true }), // load .env
+    CloudinaryModule,
 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

@@ -20,7 +20,7 @@ async function bootstrap() {
   }));
 
   //config cookies
-  app.use(cookieParser());
+  app.use(cookieParser())
 
   //config cors
   app.enableCors(
