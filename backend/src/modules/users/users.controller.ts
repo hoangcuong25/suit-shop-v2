@@ -62,4 +62,7 @@ export class UsersController {
   ) {
     return this.usersService.updatePassword(req.user, reqBody)
   }
+
+  // @Delete('delete-user')
+  // @ResponseMessage("Delete user")
 }
