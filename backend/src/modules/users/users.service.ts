@@ -161,4 +161,9 @@ export class UsersService {
 
     return 'ok'
   }
+
+  async updatePhone(req, phone) {
+    await this.userModel.findByIdAndUpdate(req._id, { phone: phone })
+    return 'ok'
+  }
 }

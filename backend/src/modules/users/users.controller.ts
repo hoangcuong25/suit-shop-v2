@@ -40,4 +40,13 @@ export class UsersController {
   ) {
     return this.usersService.updateProfile(req.user, updateUserDto, file)
   }
+
+  @Patch('update-phone')
+  @ResponseMessage("Update phone")
+  updatePhone(
+    @Req() req,
+    @Body() reqBody: { phone: string }
+  ) {
+    return this.usersService.updatePhone(req.user, reqBody.phone)
+  }
 }
