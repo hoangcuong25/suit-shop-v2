@@ -133,9 +133,9 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
 
     const logout = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/oauth/log-out')
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/auth/logout')
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 setToken(false)
                 localStorage.removeItem('access_token')
                 localStorage.removeItem('refresh_token')
