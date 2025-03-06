@@ -8,10 +8,10 @@ import { FaRegEye } from "react-icons/fa";
 import { AiOutlineReload } from 'react-icons/ai';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AppContext } from '@/context/AppContext';
 import GoogleLogin from '@/components/GoogleLogin';
+import axiosClient from '@/lib/axiosClient';
 
 const Login = () => {
 
@@ -31,17 +31,17 @@ const Login = () => {
         setLoading(true)
 
         try {
-            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/oauth/login', { email, password })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/auth/login', { email, password })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success("Login Successfully")
-                localStorage.setItem('access_token', data.access_token)
-                localStorage.setItem('refresh_token', data.refresh_token)
-                setToken(data.access_token)
+                localStorage.setItem('access_token', data.dataRes.access_token)
+                localStorage.setItem('refresh_token', data.dataRes.refresh_token)
+                setToken(data.dataRes.access_token)
                 router.push('/')
                 scrollTo(0, 0)
             } else {
-                toast.error(data.message)
+                toast.error('Incorrect email or password')
             }
 
         } catch (error: any) {

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { comparePasswordHelper } from 'src/helpers/util';
 import { JwtService } from '@nestjs/jwt';
@@ -56,17 +56,11 @@ export class AuthService {
 
     const refresh_token = this.createRefreshToken(payload);
 
-    //set refresh_token as cookies
-    const refreshExpire = this.configService.get<string>("JWT_REFRESH_EXPIRE") || "1d"
-    response.cookie('refresh_token', refresh_token, {
-      httpOnly: true,
-      maxAge: ms(refreshExpire as ms.StringValue)
-    })
-
     await this.storeRefreshToken(user._id, refresh_token)
 
     return {
       access_token: this.jwtService.sign(payload),
+      refresh_token: refresh_token
     };
   }
 

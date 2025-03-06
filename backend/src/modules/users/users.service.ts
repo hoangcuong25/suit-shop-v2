@@ -50,7 +50,6 @@ export class UsersService {
       }
 
       const hashPassword = await hashPasswordHelper(password1)
-      const codeId = uuidv4()
 
       const user = await this.userModel.create({
         firstName,
@@ -60,7 +59,6 @@ export class UsersService {
         dob,
         phone,
         isActive: false,
-        codeId: codeId,
         codeExpired: dayjs().add(5, 'minute')
       })
 
@@ -78,12 +76,11 @@ export class UsersService {
   }
 
   async handleRegister(registerDto: CreateAuthDto) {
-    try {
       const { firstName, lastName, email, password1, password2, dob, phone } = registerDto
 
       const isExist = await this.isEmailExist(email)
       if (isExist) {
-        throw new BadRequestException('Email already exists')
+        throw new BadRequestException('Email already exists!')
       }
 
       if (password1 !== password2) {
@@ -100,7 +97,6 @@ export class UsersService {
       }
 
       const hashPassword = await hashPasswordHelper(password1)
-      const codeId = uuidv4()
 
       const user = await this.userModel.create({
         firstName,
@@ -110,27 +106,11 @@ export class UsersService {
         dob,
         phone,
         isActive: false,
-        codeId: codeId,
-        codeExpired: dayjs().add(5, 'minute')
-      })
-
-      this.mailerService.sendMail({
-        to: user.email, // list of receivers
-        subject: 'Activate your account', // Subject line
-        template: "register",
-        context: {
-          name: `${user.firstName} ${user.lastName}`,
-          activationCode: codeId
-        }
       })
 
       return {
         _id: user._id,
       }
-    } catch (error) {
-      console.log(error)
-      throw new BadRequestException('internal server error')
-    }
   }
 
   async findAll() {

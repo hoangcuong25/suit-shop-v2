@@ -1,19 +1,16 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { AiOutlineReload } from 'react-icons/ai';
 import { useRouter } from 'next/navigation'
 import Link from 'next/link';
-import axios from 'axios'
 import { toast } from 'react-toastify';
-import { AppContext } from '@/context/AppContext';
+import axiosClient from '@/lib/axiosClient';
 
 const Register = () => {
-
-    const { setToken } = useContext(AppContext)
 
     const router = useRouter()
 
@@ -25,8 +22,8 @@ const Register = () => {
     const [lastName, setLastName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [phone, setPhone] = useState<string>('')
-    const [password_1, setPassword_1] = useState<string>('')
-    const [password_2, setPassword_2] = useState<string>('')
+    const [password1, setPassword1] = useState<string>('')
+    const [password2, setPassword2] = useState<string>('')
     const [dob, setDob] = useState<string>('')
 
     const register = async (e: React.FormEvent): Promise<void> => {
@@ -35,31 +32,26 @@ const Register = () => {
         setLoadingLogin(true)
 
         try {
-
             const payload = {
                 firstName,
                 lastName,
                 email,
                 phone,
-                password_1,
-                password_2,
+                password1,
+                password2,
                 dob
             }
 
-            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/oauth/register`, payload)
+            const { data } = await axiosClient.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`, payload)
 
-            if (data.success) {
-                localStorage.setItem('access_token', data.access_token)
-                localStorage.setItem('refresh_token', data.refresh_token)
-                setToken(data.access_token)
-                router.push('/')
+            if (data.statusCode === 201) {
+                router.push('/login')
                 window.scrollTo(0, 0);
                 toast.success("Registration Successful")
-            } else {
-                toast.error(data.message)
             }
 
         } catch (error: any) {
+            console.log(error)
             toast.error(error.response?.data?.message || "Something went wrong!")
         }
 
@@ -123,8 +115,8 @@ const Register = () => {
                         <input
                             type={`${isShow ? 'text' : 'password'}`}
                             className='border-b border-gray-500 focus:outline-none w-full mt-2'
-                            value={password_1}
-                            onChange={(e) => setPassword_1(e.target.value)}
+                            value={password1}
+                            onChange={(e) => setPassword1(e.target.value)}
                         />
 
                         {isShow ?
@@ -138,8 +130,8 @@ const Register = () => {
                         <input
                             type={`${isShow ? 'text' : 'password'}`}
                             className='border-b border-gray-500 focus:outline-none w-full mt-2'
-                            value={password_2}
-                            onChange={(e) => setPassword_2(e.target.value)}
+                            value={password2}
+                            onChange={(e) => setPassword2(e.target.value)}
                         />
 
                         {isShow ?

@@ -8,8 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './modules/auth/passport/jwt-auth.guard';
 import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
@@ -71,11 +69,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
   ],
   controllers: [AppController],
   providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    }
+    AppService
   ],
 })
 export class AppModule { }

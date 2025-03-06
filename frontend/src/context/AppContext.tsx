@@ -3,7 +3,6 @@
 'use client'
 
 import axiosClient from "@/lib/axiosClient";
-import { CartData, CouponData, OrderData, ProductData, UserData } from "@/type/appType";
 import { useRouter } from "next/navigation";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -76,14 +75,14 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
 
     const loadUserProfileData = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/profile')
+            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/users/get-profile')
 
-            if (data.success) {
-                setUserData(data.userData)
-                setCart(data.userData.cart)
-                setWishlist(data.userData.wishlist)
+            if (data.statusCode === 200) {
+                setUserData(data.dataRes)
+                setCart(data.dataRes.cart)
+                setWishlist(data.dataRes.wishlist)
             } else {
-                toast.error(data.message)
+                toast.error(data?.message)
             }
 
         } catch (error: any) {

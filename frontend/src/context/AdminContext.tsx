@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { ProductData, UserData } from "@/type/appType"
 import axios from "axios"
 import { ReactNode, useEffect, useState } from "react"
 import { toast } from "react-toastify"

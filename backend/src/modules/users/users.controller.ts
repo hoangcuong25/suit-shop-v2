@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseInterceptors
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public} from 'src/decorator/customize';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
@@ -31,7 +31,6 @@ export class UsersController {
   }
 
   @Patch('update-profile')
-  @ResponseMessage("Update profile")
   @UseInterceptors(FileInterceptor('file'))
   updateProfile(
     @Req() req,
@@ -42,7 +41,6 @@ export class UsersController {
   }
 
   @Patch('update-phone')
-  @ResponseMessage("Update phone")
   updatePhone(
     @Req() req,
     @Body() reqBody: { phone: string }
@@ -51,7 +49,6 @@ export class UsersController {
   }
 
   @Patch('update-password')
-  @ResponseMessage("Update Password")
   updatePassword(
     @Req() req,
     @Body() reqBody: {
@@ -64,5 +61,4 @@ export class UsersController {
   }
 
   // @Delete('delete-user')
-  // @ResponseMessage("Delete user")
 }
