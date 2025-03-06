@@ -50,7 +50,6 @@ export class AuthService {
     const payload = {
       sub: 'token',
       iss: 'from server',
-      email: user.email,
       _id: user._id,
     };
 
@@ -82,5 +81,28 @@ export class AuthService {
     catch {
       throw new UnauthorizedException
     }
+  }
+
+  async refreshToken(req) {
+    const refreshToken = req.headers.refreshtoken
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('No refresh token provided!!!')
+    }
+
+    const decoded = this.jwtService.verify(refreshToken, { secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET") })
+    const storedToken = await this.redis.get(`refresh_token:${decoded._id}`);
+
+    if (storedToken !== refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token')
+    }
+
+    const payload = {
+      sub: 'token',
+      iss: 'from server',
+      _id: decoded._id,
+    };
+
+    return this.jwtService.sign(payload)
   }
 }

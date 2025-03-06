@@ -22,17 +22,18 @@ axiosClient.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem('refresh_token');
+            console.log('refreshToken', refreshToken)
 
             if (!refreshToken) {
                 return Promise.reject(error);
             }
 
             try {
-                const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/oauth/refresh-token`, {}, {
+                const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/refresh-token`, {}, {
                     headers: { refreshToken }
                 })
 
-                const newAccessToken = res.data.access_token;
+                const newAccessToken = data.dataRes;
                 if (newAccessToken) {
                     localStorage.setItem('access_token', newAccessToken);
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

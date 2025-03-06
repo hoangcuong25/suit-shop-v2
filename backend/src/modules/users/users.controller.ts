@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseInterceptors
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Public} from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
@@ -26,6 +26,7 @@ export class UsersController {
   }
 
   @Get('get-profile')
+  @ResponseMessage('get user profile')
   getProfile(@Req() req) {
     return this.usersService.getProfile(req.user)
   }

@@ -40,12 +40,10 @@ const Login = () => {
                 setToken(data.dataRes.access_token)
                 router.push('/')
                 scrollTo(0, 0)
-            } else {
-                toast.error('Incorrect email or password')
             }
 
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || "Something went wrong")
+        } catch {
+            toast.error('Incorrect email or password')
         }
 
         setLoading(false)

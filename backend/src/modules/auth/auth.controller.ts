@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Res,
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { Public} from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Response } from 'express';
 
@@ -15,6 +15,7 @@ export class AuthController {
 
   @Post('login')
   @Public()
+  @ResponseMessage('login')
   @UseGuards(LocalAuthGuard)
   async login(
     @Req() req,
@@ -24,12 +25,21 @@ export class AuthController {
   }
 
   @Post('register')
+  @ResponseMessage('register')
   @Public()
   register(@Body() registerDto: CreateAuthDto) {
     return this.authService.handleRegister(registerDto);
   }
 
+  @Post('refresh-token')
+  @Public()
+  @ResponseMessage('refresh token')
+  refreshToken(@Req() req) {
+    return this.authService.refreshToken(req)
+  }
+
   @Get('mail')
+  @ResponseMessage('send mail active account')
   @Public()
   sendMail() {
     this.mailerService
@@ -47,6 +57,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @ResponseMessage('logout')
   logout(@Req() req) {
     return this.authService.logout(req)
   }
