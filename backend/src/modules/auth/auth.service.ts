@@ -8,6 +8,8 @@ import { Response } from 'express';
 import ms from 'ms';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
+import { MailerService } from '@nestjs-modules/mailer';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private readonly mailerService: MailerService,
     @InjectRedis() private readonly redis: Redis
   ) { }
 
@@ -104,5 +107,43 @@ export class AuthService {
     };
 
     return this.jwtService.sign(payload)
+  }
+
+  async sendEmailActive(req) {
+    const codeId = Math.random().toString(36).substring(2, 8);
+
+    const user = await this.usersService.findById(req._id)
+
+    this.mailerService
+      .sendMail({
+        to: user?.email, // list of receivers
+        subject: 'Email Active Account', // Subject line
+        text: 'welcome', // plaintext body
+        template: "register",
+        context: {
+          name: user?.firstName + ' ' + user?.lastName,
+          activationCode: codeId
+        }
+      })
+
+    await this.usersService.updateCodeActive(req._id, codeId)
+
+    return "ok";
+  }
+
+  async comfirmActive(req, codeId) {
+    const user = await this.usersService.findById(req._id)
+
+    if (user?.codeId !== codeId) {
+      throw new BadRequestException('Invalid activation code')
+    }
+
+    if (user?.codeExpired && new Date() > user.codeExpired) {
+      throw new BadRequestException('Activation code has expired');
+    }
+
+    await this.usersService.activeAccount(req._id)
+
+    return 'ok'
   }
 }

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from './ui/button';
 import axiosClient from '@/lib/axiosClient';
+import DialogComfirmAccount from './DialogComfirmAccount';
 
 type Props = {
     setShow: React.Dispatch<React.SetStateAction<boolean>>
@@ -350,9 +351,7 @@ const EditProfile = ({ setShow, show }: Props) => {
                         <FcGoogle className='text-2xl' />
                         <p>Google</p>
                     </div>
-                    <div className='bg-gray-300 shadow-lg rounded-md text-gray-500 font-bold px-5 py-1.5 h-fit hover:bg-green-300'>
-                        Update
-                    </div>
+                    <DialogComfirmAccount />
                 </div>
             </div>
         </div >

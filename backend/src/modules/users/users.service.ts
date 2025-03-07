@@ -27,6 +27,21 @@ export class UsersService {
     return false
   }
 
+  async updateCodeActive(_id, codeId) {
+    await this.userModel.findByIdAndUpdate(_id,
+      {
+        codeId: codeId,
+        codeExpired: new Date(Date.now() + 5 * 60 * 1000)
+      })
+  }
+
+  async activeAccount(_id) {
+    await this.userModel.findByIdAndUpdate(_id, {
+      isActive: true,
+      codeId: ''
+    })
+  }
+
   async create(createUserDto: CreateUserDto) {
     try {
       const { firstName, lastName, email, password1, password2, dob, phone } = createUserDto
@@ -75,42 +90,46 @@ export class UsersService {
     return await this.userModel.findOne({ email })
   }
 
+  async findById(_id: string) {
+    return await this.userModel.findById(_id)
+  }
+
   async handleRegister(registerDto: CreateAuthDto) {
-      const { firstName, lastName, email, password1, password2, dob, phone } = registerDto
+    const { firstName, lastName, email, password1, password2, dob, phone } = registerDto
 
-      const isExist = await this.isEmailExist(email)
-      if (isExist) {
-        throw new BadRequestException('Email already exists!')
-      }
+    const isExist = await this.isEmailExist(email)
+    if (isExist) {
+      throw new BadRequestException('Email already exists!')
+    }
 
-      if (password1 !== password2) {
-        throw new BadRequestException('Password not match')
-      }
+    if (password1 !== password2) {
+      throw new BadRequestException('Password not match')
+    }
 
-      const isPhone = await this.userModel.findOne({ phone })
-      if (isPhone) {
-        throw new BadRequestException('Phone already exists')
-      }
+    const isPhone = await this.userModel.findOne({ phone })
+    if (isPhone) {
+      throw new BadRequestException('Phone already exists')
+    }
 
-      if (phone.length !== 10) {
-        throw new BadRequestException('Phone number must be 10 digits')
-      }
+    if (phone.length !== 10) {
+      throw new BadRequestException('Phone number must be 10 digits')
+    }
 
-      const hashPassword = await hashPasswordHelper(password1)
+    const hashPassword = await hashPasswordHelper(password1)
 
-      const user = await this.userModel.create({
-        firstName,
-        lastName,
-        email,
-        password: hashPassword,
-        dob,
-        phone,
-        isActive: false,
-      })
+    const user = await this.userModel.create({
+      firstName,
+      lastName,
+      email,
+      password: hashPassword,
+      dob,
+      phone,
+      isActive: false,
+    })
 
-      return {
-        _id: user._id,
-      }
+    return {
+      _id: user._id,
+    }
   }
 
   async findAll() {
