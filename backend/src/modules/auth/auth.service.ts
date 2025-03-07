@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { comparePasswordHelper } from 'src/helpers/util';
+import { comparePasswordHelper, hashPasswordHelper } from 'src/helpers/util';
 import { JwtService } from '@nestjs/jwt';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { ConfigService } from '@nestjs/config';
@@ -143,6 +143,62 @@ export class AuthService {
     }
 
     await this.usersService.activeAccount(req._id)
+
+    return 'ok'
+  }
+
+  async sendResetOtp(email) {
+    if (!email) {
+      throw new BadRequestException('Email is required')
+    }
+
+    const user = await this.usersService.findByEmail(email)
+
+    if (!user) {
+      throw new BadRequestException('User not found')
+    }
+
+    const otp = Math.random().toString(36).substring(2, 8);
+
+    await this.usersService.updateOptReset(user._id, otp)
+
+    this.mailerService
+      .sendMail({
+        to: user?.email, // list of receivers
+        subject: 'Reset Password', // Subject line
+        text: 'Reset Your Password', // plaintext body
+        template: "resetPassword",
+        context: {
+          name: user?.firstName + ' ' + user?.lastName,
+          activationCode: otp
+        }
+      })
+
+    return 'ok'
+  }
+
+  async resetPassword(email, otp, newPassword) {
+    if (!email || !otp || !newPassword) {
+      throw new BadRequestException('Email, OTP, and password are required')
+    }
+
+    const user = await this.usersService.findByEmail(email)
+
+    if (!user) {
+      throw new BadRequestException('User not fount')
+    }
+
+    if (user?.resetOpt === '' || user?.resetOpt !== otp) {
+      throw new BadRequestException('Invalid OTP')
+    }
+
+    if (user?.resetOptExpireAt && new Date() > user.resetOptExpireAt) {
+      throw new BadRequestException('OTP Expired')
+    }
+
+    const hashPassword = await hashPasswordHelper(newPassword)
+
+    this.usersService.resetPassword(user._id, hashPassword)
 
     return 'ok'
   }

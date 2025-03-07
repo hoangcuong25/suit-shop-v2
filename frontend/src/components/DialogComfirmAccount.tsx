@@ -53,7 +53,7 @@ const DialogComfirmAccount = () => {
         <Dialog>
             <DialogTrigger>
                 <div className='bg-gray-300 shadow-lg rounded-md text-gray-500 font-bold px-5 py-1.5 h-fit hover:bg-green-300 cursor-pointer'>
-                    Update
+                    Active account
                 </div>
             </DialogTrigger>
             <DialogContent>

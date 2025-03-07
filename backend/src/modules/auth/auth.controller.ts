@@ -51,6 +51,20 @@ export class AuthController {
     return this.authService.comfirmActive(req.user, body.codeId)
   }
 
+  @Post('send-reset-otp')
+  @Public()
+  @ResponseMessage('send reset otp password')
+  sendResetOtp(@Body() body) {
+    return this.authService.sendResetOtp(body.email)
+  }
+
+  @Post('reset-password')
+  @Public()
+  @ResponseMessage('comfirm active account')
+  resetPassword(@Body() body) {
+    return this.authService.resetPassword(body.email, body.otp, body.newPassword)
+  }
+
   @Post('logout')
   @ResponseMessage('logout')
   logout(@Req() req) {

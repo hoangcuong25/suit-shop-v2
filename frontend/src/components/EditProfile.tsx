@@ -351,7 +351,13 @@ const EditProfile = ({ setShow, show }: Props) => {
                         <FcGoogle className='text-2xl' />
                         <p>Google</p>
                     </div>
-                    <DialogComfirmAccount />
+                    {
+                        userData && userData.isActive
+                            ? <div className='bg-green-500 shadow-lg rounded-md text-white font-bold px-5 py-1.5 h-fit'>
+                                Activated
+                            </div>
+                            : <DialogComfirmAccount />
+                    }
                 </div>
             </div>
         </div >

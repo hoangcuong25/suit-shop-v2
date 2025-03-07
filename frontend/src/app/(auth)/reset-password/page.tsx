@@ -48,15 +48,16 @@ const ResetPassword = () => {
         e.preventDefault()
 
         try {
-            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/oauth/send-reset-otp', { email })
+            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/auth/send-reset-otp', { email })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 setIsEmailSent(true)
                 toast.success("OTP code has been sent to your Email")
             }
 
         } catch (error: any) {
             console.log(error.message)
+            toast.error(error.response?.data?.message)
         }
     }
 
@@ -71,14 +72,15 @@ const ResetPassword = () => {
         e.preventDefault()
 
         try {
-            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/oauth/reset-password', { email, otp, newPassword })
-            if (data.success) {
+            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/auth/reset-password', { email, otp, newPassword })
+            if (data.statusCode === 201) {
                 router.push('/login')
                 toast.success('Password changed successfully')
             }
 
         } catch (error: any) {
             console.log(error.message)
+            toast.error(error.response?.data?.message)
         }
     }
 

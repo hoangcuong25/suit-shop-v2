@@ -18,6 +18,7 @@ declare global {
         cart: CartData[]
         wishlist: any[]
         points: number
+        isActive: boolean
     }
 
     type ProductData = {

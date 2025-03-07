@@ -38,7 +38,25 @@ export class UsersService {
   async activeAccount(_id) {
     await this.userModel.findByIdAndUpdate(_id, {
       isActive: true,
-      codeId: ''
+      codeId: '',
+      codeExpired: 0
+    })
+  }
+
+  async updateOptReset(_id, otp) {
+    await this.userModel.findByIdAndUpdate(_id,
+      {
+        resetOpt: otp,
+        resetOptExpireAt: new Date(Date.now() + 5 * 60 * 1000)
+      }
+    )
+  }
+
+  async resetPassword(_id, password) {
+    await this.userModel.findByIdAndUpdate(_id, {
+      password: password,
+      resetOpt: '',
+      resetOptExpireAt: 0
     })
   }
 
