@@ -27,19 +27,18 @@ const GoogleLogin = () => {
             const email = result.user.email
             const image = result.user.photoURL
 
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/oauth/login-google", { lastName, firstName, email, image })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/auth/login-google", { lastName, firstName, email, image })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success("Login Successfully")
-                localStorage.setItem('access_token', data.access_token)
-                localStorage.setItem('refresh_token', data.refresh_token)
-                setToken(data.access_token)
+                localStorage.setItem('access_token', data.dataRes.access_token)
+                localStorage.setItem('refresh_token', data.dataRes.refresh_token)
+                setToken(data.dataRes.access_token)
                 router.push('/')
                 scrollTo(0, 0)
             } else {
                 toast.error(data.message)
             }
-
 
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Something went wrong")

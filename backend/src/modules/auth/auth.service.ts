@@ -202,4 +202,61 @@ export class AuthService {
 
     return 'ok'
   }
+
+  async loginGoole(firstName, lastName, email, image) {
+    if (!firstName || !lastName || !email || !image) {
+      throw new BadRequestException("Please Fill In All Information")
+    }
+
+    const user = await this.usersService.findByEmail(email)
+
+    if (user) {
+      const payload = {
+        sub: 'token',
+        iss: 'from server',
+        _id: user._id,
+      };
+
+      const access_token = this.jwtService.sign(payload);
+      const refresh_token = this.createRefreshToken(payload);
+
+      await this.storeRefreshToken(user._id, refresh_token)
+
+      return {
+        access_token,
+        refresh_token
+      }
+    } else {
+      const generatedPassword = Math.random().toString(36).slice(-8)
+      const hashedPassword = await hashPasswordHelper(generatedPassword)
+
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        phone: "Unknown",
+        password: hashedPassword,
+        dob: "Unknown",
+        image
+      }
+
+      const user = await this.usersService.createWithGoole(userData)
+
+      const payload = {
+        sub: 'token',
+        iss: 'from server',
+        _id: user._id,
+      };
+
+      const access_token = this.jwtService.sign(payload);
+      const refresh_token = this.createRefreshToken(payload);
+
+      await this.storeRefreshToken(user._id, refresh_token)
+
+      return {
+        access_token,
+        refresh_token
+      }
+    }
+  }
 }

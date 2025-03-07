@@ -60,6 +60,13 @@ export class UsersService {
     })
   }
 
+  async createWithGoole(userData) {
+    const newUser = new this.userModel(userData)
+    await newUser.save()
+
+    return newUser
+  }
+
   async create(createUserDto: CreateUserDto) {
     try {
       const { firstName, lastName, email, password1, password2, dob, phone } = createUserDto

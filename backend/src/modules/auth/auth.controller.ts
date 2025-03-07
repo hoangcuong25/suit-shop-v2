@@ -65,6 +65,13 @@ export class AuthController {
     return this.authService.resetPassword(body.email, body.otp, body.newPassword)
   }
 
+  @Post('login-google')
+  @Public()
+  @ResponseMessage('login with goole')
+  loginGoole(@Body() body) {
+    return this.authService.loginGoole(body.firstName, body.lastName, body.email, body.image)
+  }
+
   @Post('logout')
   @ResponseMessage('logout')
   logout(@Req() req) {
