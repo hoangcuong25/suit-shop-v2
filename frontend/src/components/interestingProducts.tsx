@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { AppContext } from '@/context/AppContext';
 import { toast } from 'react-toastify';
-import { ProductData } from '@/type/appType';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';

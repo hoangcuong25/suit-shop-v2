@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client'
@@ -66,6 +67,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
     const [sidebar, setSidebar] = useState<string>('')
 
     const [userData, setUserData] = useState<UserData | false>(false)
+
     const [cart, setCart] = useState<CartData[] | false>(false)
     const [wishlist, setWishlist] = useState<ProductData[] | false>(false)
     const [order, setOrder] = useState<OrderData[] | false>(false)
