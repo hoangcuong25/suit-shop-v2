@@ -50,10 +50,14 @@ export class AuthService {
   }
 
   async login(user: any, response: Response) {
+
+    const userLogin = await this.usersService.findById(user._id)
+
     const payload = {
       sub: 'token',
       iss: 'from server',
       _id: user._id,
+      role: userLogin?.role
     };
 
     const refresh_token = this.createRefreshToken(payload);
@@ -100,10 +104,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token')
     }
 
+    const user = await this.usersService.findById(decoded._id)
+
     const payload = {
       sub: 'token',
       iss: 'from server',
       _id: decoded._id,
+      role: user?.role
     };
 
     return this.jwtService.sign(payload)
@@ -215,6 +222,7 @@ export class AuthService {
         sub: 'token',
         iss: 'from server',
         _id: user._id,
+        role: user.role
       };
 
       const access_token = this.jwtService.sign(payload);
@@ -246,6 +254,7 @@ export class AuthService {
         sub: 'token',
         iss: 'from server',
         _id: user._id,
+        role: user.role
       };
 
       const access_token = this.jwtService.sign(payload);

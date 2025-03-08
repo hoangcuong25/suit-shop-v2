@@ -55,6 +55,10 @@ export class User {
 
     @Prop({ type: Date, default: 0 })
     codeExpired: Date;
+
+    @Prop({ type: String, default: "user" })
+    role: string;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
