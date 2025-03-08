@@ -1,11 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Product } from './schemas/product.schema';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+
+  constructor(
+    @InjectModel('Product')
+    private productModel: Model<Product>,
+    private readonly cloudinaryService: CloudinaryService
+  ) { }
+
+  async create(createProductDto: CreateProductDto, files) {
+    const { name, type, oldPrice, newPrice } = createProductDto
+
+    if (!files || files.length !== 2) {
+      throw new BadRequestException('You have to upload 2 image')
+    }
+
+    // upload image to cloudinary
+    const imageUpload1 = await this.cloudinaryService.uploadFile(files[0])
+    const imageUrl1 = imageUpload1.url
+
+    const imageUpload2 = await this.cloudinaryService.uploadFile(files[1])
+    const imageUrl2 = imageUpload2.url
+
+    const isName = await this.productModel.findOne({ name })
+    if (isName) {
+      throw new BadRequestException('This product already exist')
+    }
+
+    const productData = {
+      name,
+      type,
+      oldPrice,
+      newPrice,
+      image1: imageUrl1,
+      image2: imageUrl2,
+    }
+
+    const newProduct = new this.productModel(productData)
+    await newProduct.save()
+
+    return 'ok'
   }
 
   findAll() {

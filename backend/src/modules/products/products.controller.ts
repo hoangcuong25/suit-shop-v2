@@ -1,17 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, UploadedFiles } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
-  @Post()
+  @Post('add-product')
+  @ResponseMessage('add product')
   @Public()
-  create(@Body() createProductDto: CreateProductDto) {
-    throw new BadRequestException('kkkkkkk')
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() files: Express.Multer.File[]
+  ) {
+    return this.productsService.create(createProductDto, files)
   }
 
   @Get()
