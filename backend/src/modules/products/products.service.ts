@@ -117,4 +117,14 @@ export class ProductsService {
       { $push: { comments: commentData } }
     )
   }
+
+  async getRate(productId) {
+    const product = await this.productModel.findById(productId)
+
+    if (!product) {
+      throw new BadRequestException("Product nt found")
+    }
+
+    return product.rate
+  }
 }

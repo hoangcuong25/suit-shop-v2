@@ -52,7 +52,14 @@ export class ProductsController {
   comment(
     @Body() body,
     @Req() req
-  ){
-    return this.productsService.comment(body, req.user)
+  ) {
+    return this.productsService.comment(req.user, body)
+  }
+
+  @Post('get-rates')
+  @ResponseMessage('get rate of product')
+  @Public()
+  getRate(@Body() body) {
+    return this.productsService.getRate(body.productId)
   }
 }

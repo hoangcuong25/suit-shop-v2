@@ -103,9 +103,9 @@ const Page = () => {
         setLoadingComment(true)
 
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/comment', { comment, productId })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/comment', { comment, productId })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Comments successfully')
                 getProductById()
             } else {
@@ -135,10 +135,10 @@ const Page = () => {
 
     const getRate = async () => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/get-rate', { productId })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/get-rates', { productId })
 
-            if (data.success) {
-                setRate(data.rate)
+            if (data.statusCode === 201) {
+                setRate(data.dataRes)
             }
         }
         catch (error: any) {
@@ -151,7 +151,7 @@ const Page = () => {
         getRate()
     }, [productId])
 
-    const ratingCounts = rate.reduce(
+    const ratingCounts = rate && rate.reduce(
         (acc, { rate }) => {
             acc[rate as keyof typeof acc] = (acc[rate as keyof typeof acc] || 0) + 1
             return acc
