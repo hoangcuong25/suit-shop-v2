@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseIn
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage, Roles } from 'src/decorator/customize';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
@@ -11,7 +11,7 @@ export class ProductsController {
 
   @Post('add-product')
   @ResponseMessage('add product')
-  @Public()
+  @Roles('admin')
   @UseInterceptors(FilesInterceptor('images', 2))
   create(
     @Body() createProductDto,
@@ -20,7 +20,9 @@ export class ProductsController {
     return this.productsService.create(createProductDto, images)
   }
 
-  @Get()
+  @Get('all-product')
+  @ResponseMessage('find all product')
+  @Roles('admin')
   findAll() {
     return this.productsService.findAll();
   }
