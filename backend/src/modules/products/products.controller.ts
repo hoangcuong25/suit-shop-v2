@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors, Req } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -45,5 +45,14 @@ export class ProductsController {
   @Roles('admin')
   deleteProduct(@Body() body) {
     return this.productsService.deleteProduct(body._id)
+  }
+
+  @Post('comment')
+  @ResponseMessage('comment about product')
+  comment(
+    @Body() body,
+    @Req() req
+  ){
+    return this.productsService.comment(body, req.user)
   }
 }

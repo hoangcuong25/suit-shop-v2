@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from './schemas/product.schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ProductsService {
@@ -12,7 +13,8 @@ export class ProductsService {
   constructor(
     @InjectModel('Product')
     private productModel: Model<Product>,
-    private readonly cloudinaryService: CloudinaryService
+    private readonly cloudinaryService: CloudinaryService,
+    private usersService: UsersService,
   ) { }
 
   async create(createProductDto: CreateProductDto, images) {
@@ -88,5 +90,31 @@ export class ProductsService {
   async deleteProduct(_id: string) {
     await this.productModel.findByIdAndDelete(_id)
     return 'ok';
+  }
+
+  async comment(user, body) {
+    const { comment, productId } = body
+
+    if (!comment) {
+      throw new BadRequestException('Let us know what you think')
+    }
+
+    const userData = await this.usersService.findById(user._id)
+
+    const product = await this.productModel.findById(productId)
+
+    if (!product) {
+      throw new BadRequestException('Product not found');
+    }
+
+    const commentData = {
+      userData: userData,
+      comment: comment
+    }
+
+    return await this.productModel.updateOne(
+      { _id: productId },
+      { $push: { comments: commentData } }
+    )
   }
 }
