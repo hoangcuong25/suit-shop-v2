@@ -22,9 +22,15 @@ export class ProductsController {
 
   @Get('all-product')
   @ResponseMessage('find all product')
-  @Roles('admin')
-  findAll() {
-    return this.productsService.findAll();
+  @Public()
+  findAll(
+    @Param('limit') limit: number,
+    @Param('page') page: number,
+    @Param('type') type: string,
+    @Param('price_option') price_option: string,
+    @Param('sort ') sort: string,
+  ) {
+    return this.productsService.findAll(limit, page, type, price_option, sort);
   }
 
   @Get(':id')
@@ -37,8 +43,10 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  @Post('delete-product')
+  @ResponseMessage('delete product')
+  @Roles('admin')
+  deleteProduct(@Body() body) {
+    return this.productsService.deleteProduct(body._id)
   }
 }

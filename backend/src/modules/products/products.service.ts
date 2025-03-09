@@ -49,9 +49,36 @@ export class ProductsService {
     return 'ok'
   }
 
-  findAll() {
-    return this.productModel.find();
+  async findAll(limit = 15, page = 1, type?: string, price_option?: string, sort?: string) {
+    const filter: any = {};
+
+    if (type) {
+      filter.type = type;
+    }
+
+    if (price_option === 'option1') {
+      filter.newPrice = { $gte: 100, $lt: 300 };
+    } else if (price_option === 'option2') {
+      filter.newPrice = { $gte: 300, $lte: 350 };
+    }
+
+    let query = this.productModel.find(filter);
+
+    if (sort === 'low to high') {
+      query = query.sort({ newPrice: 1 });
+    } else if (sort === 'high to low') {
+      query = query.sort({ newPrice: -1 });
+    }
+
+    // Đếm số lượng sản phẩm còn lại
+    const remmainProducts = await query.clone().countDocuments();
+
+    // Phân trang
+    const products = await query.skip((page - 1) * limit).limit(Number(limit));
+
+    return { productData: products, remmainProducts };
   }
+
 
   findOne(id: number) {
     return `This action returns a #${id} product`;
@@ -61,7 +88,8 @@ export class ProductsService {
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  deleteProduct(_id: string) {
+    this.productModel.findByIdAndDelete(_id)
+    return 'ok';
   }
 }
