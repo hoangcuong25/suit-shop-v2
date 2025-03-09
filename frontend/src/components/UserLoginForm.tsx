@@ -10,6 +10,7 @@ import { FaRegEye } from "react-icons/fa";
 import { AiOutlineReload } from 'react-icons/ai';
 import GoogleLogin from '@/components/GoogleLogin';
 import Link from 'next/link';
+import { jwtDecode } from "jwt-decode";
 
 const UserLoginForm = () => {
 
@@ -36,8 +37,15 @@ const UserLoginForm = () => {
                 localStorage.setItem('access_token', data.dataRes.access_token)
                 localStorage.setItem('refresh_token', data.dataRes.refresh_token)
                 setToken(data.dataRes.access_token)
-                router.push('/')
-                scrollTo(0, 0)
+
+                const decoded: { role: string } = jwtDecode(data.dataRes.access_token)
+                if (decoded.role === 'admin') {
+                    router.push('/admin/dashboard')
+                    scrollTo(0, 0)
+                } else {
+                    router.push('/')
+                    scrollTo(0, 0)
+                }
             }
 
         } catch {

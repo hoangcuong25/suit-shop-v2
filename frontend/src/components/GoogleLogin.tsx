@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { AppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
 import axiosClient from '@/lib/axiosClient';
+import { jwtDecode } from "jwt-decode";
 
 const GoogleLogin = () => {
 
@@ -34,8 +35,15 @@ const GoogleLogin = () => {
                 localStorage.setItem('access_token', data.dataRes.access_token)
                 localStorage.setItem('refresh_token', data.dataRes.refresh_token)
                 setToken(data.dataRes.access_token)
-                router.push('/')
-                scrollTo(0, 0)
+
+                const decoded: { role: string } = jwtDecode(data.dataRes.access_token)
+                if (decoded.role === 'admin') {
+                    router.push('/admin/dashboard')
+                    scrollTo(0, 0)
+                } else {
+                    router.push('/')
+                    scrollTo(0, 0)
+                }
             } else {
                 toast.error(data.message)
             }
