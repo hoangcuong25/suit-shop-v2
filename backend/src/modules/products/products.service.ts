@@ -79,17 +79,14 @@ export class ProductsService {
     return { productData: products, remmainProducts };
   }
 
+  async getProductById(_id) {
+    const productData = await this.productModel.findById(_id)
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+    return productData
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  deleteProduct(_id: string) {
-    this.productModel.findByIdAndDelete(_id)
+  async deleteProduct(_id: string) {
+    await this.productModel.findByIdAndDelete(_id)
     return 'ok';
   }
 }

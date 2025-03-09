@@ -12,7 +12,6 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { toast } from 'react-toastify';
-import { ProductData } from '@/type/appType';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { AppContext } from '@/context/AppContext';
@@ -67,10 +66,10 @@ const Page = () => {
         try {
             setLoading(true)
 
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/get-product-by-id', { productId })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/get-product-by-id', { productId })
 
-            if (data.success) {
-                setProductInfo(data.productData)
+            if (data.statusCode === 201) {
+                setProductInfo(data.dataRes)
             }
 
             setLoading(false)
