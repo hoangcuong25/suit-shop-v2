@@ -165,7 +165,7 @@ export class UsersService {
     return await this.userModel.findById(req._id)
   }
 
-  async updateProfile(req, updateUserDto, file) {
+  async updateProfile(req, updateUserDto, image) {
     const { firstName, lastName, dob, gender, address } = updateUserDto
     const user = await this.userModel.findById(req._id)
 
@@ -175,9 +175,9 @@ export class UsersService {
 
     await this.userModel.findByIdAndUpdate(req._id, { firstName, lastName, dob, gender, address })
 
-    if (file) {
+    if (image) {
       // upload image to cloudinary
-      const imageUpload = await this.cloudinaryService.uploadFile(file)
+      const imageUpload = await this.cloudinaryService.uploadFile(image)
       const imageUrl = imageUpload.url
 
       await this.userModel.findByIdAndUpdate(req._id, { image: imageUrl })

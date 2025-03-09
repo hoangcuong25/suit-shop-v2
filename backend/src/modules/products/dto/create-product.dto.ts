@@ -12,4 +12,7 @@ export class CreateProductDto {
 
     @IsNotEmpty({ message: 'New price cannot be empty' })
     newPrice: number;
+
+    // @IsNotEmpty({ message: 'New price cannot be empty' })
+    // images: Express.Multer.File[]
 }

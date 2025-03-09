@@ -15,18 +15,18 @@ export class ProductsService {
     private readonly cloudinaryService: CloudinaryService
   ) { }
 
-  async create(createProductDto: CreateProductDto, files) {
+  async create(createProductDto: CreateProductDto, images) {
     const { name, type, oldPrice, newPrice } = createProductDto
 
-    if (!files || files.length !== 2) {
+    if (!images || images.length !== 2) {
       throw new BadRequestException('You have to upload 2 image')
     }
 
     // upload image to cloudinary
-    const imageUpload1 = await this.cloudinaryService.uploadFile(files[0])
+    const imageUpload1 = await this.cloudinaryService.uploadFile(images[0])
     const imageUrl1 = imageUpload1.url
 
-    const imageUpload2 = await this.cloudinaryService.uploadFile(files[1])
+    const imageUpload2 = await this.cloudinaryService.uploadFile(images[1])
     const imageUrl2 = imageUpload2.url
 
     const isName = await this.productModel.findOne({ name })

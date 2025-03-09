@@ -4,14 +4,14 @@
 import React, { useContext, useState } from 'react'
 import upload from './upload.png'
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { AiOutlineReload } from 'react-icons/ai';
 import Image from 'next/image';
 import { AdminContext } from '@/context/AdminContext';
+import axiosClient from '@/lib/axiosClient';
 
 const AddProduct = () => {
 
-    const {getAllProduct} = useContext(AdminContext)
+    const { getAllProduct } = useContext(AdminContext)
 
     const [loading, setLoading] = useState<boolean>(false)
     const [image1, setImage1] = useState<File | null>(null)
@@ -38,17 +38,17 @@ const AddProduct = () => {
         if (image2) formData.append('images', image2)
 
         try {
-            const { data } = await axios.post(
-                process.env.NEXT_PUBLIC_BACKEND_URL + '/api/admin/add-product',
+            const { data } = await axiosClient.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products/add-product`,
                 formData,
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'multipart/form-data', // Đảm bảo gửi file
                     },
                 }
-            )
-
-            if (data.success) {
+            );
+            
+            if (data.statusCode === 201) {
                 toast.success("Add Product Successfully");
                 getAllProduct()
             } else {

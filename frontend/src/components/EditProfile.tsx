@@ -70,8 +70,8 @@ const EditProfile = ({ setShow, show }: Props) => {
                 formData.append('image', image)  // Append image file
             }
 
-            const { data } = await axiosClient.put(
-                process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/update-profile',
+            const { data } = await axiosClient.patch(
+                process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/users/update-profile',
                 formData,
                 {
                     headers: {
@@ -80,7 +80,7 @@ const EditProfile = ({ setShow, show }: Props) => {
                 }
             )
 
-            if (data.success) {
+            if (data.statusCode === 200) {
                 toast.success('Changes saved successfully');
                 await loadUserProfileData();
             } else {

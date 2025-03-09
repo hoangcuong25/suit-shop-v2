@@ -32,13 +32,14 @@ export class UsersController {
   }
 
   @Patch('update-profile')
-  @UseInterceptors(FileInterceptor('file'))
+  @ResponseMessage('update profile')
+  @UseInterceptors(FileInterceptor('image'))
   updateProfile(
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() image: Express.Multer.File
   ) {
-    return this.usersService.updateProfile(req.user, updateUserDto, file)
+    return this.usersService.updateProfile(req.user, updateUserDto, image)
   }
 
   @Patch('update-phone')
