@@ -178,4 +178,55 @@ export class ProductsService {
 
     return interestingProducts
   }
+
+  async addToCart(userId, body) {
+    const { productId, size, length } = body
+
+    if (!productId || !size || !length) {
+      throw new BadRequestException('Chose size and length')
+    }
+
+    const productData = await this.productModel.findById(productId)
+    const user = await this.userModel.findById(userId)
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const cart = user.cart
+
+    let isHave = false
+    let indexProduct = 0
+
+    cart.forEach((i, index) => {
+      if (i.product._id.toString() === productId) {
+
+        if (i.amount.size === size && i.amount.length === length) {
+          isHave = true
+          indexProduct = index
+        }
+      }
+    })
+
+    if (isHave) {
+      cart[indexProduct].amount.quantity += 1
+      await this.userModel.findByIdAndUpdate(userId, { cart });
+
+      return 'ok'
+    } else {
+      let amount = {
+        quantity: 1,
+        size: size,
+        length: length
+      }
+      const addToCart = {
+        product: productData,
+        amount: amount
+      }
+      const cartData = [...cart, addToCart]
+
+      await this.userModel.findByIdAndUpdate(userId, { cart: cartData })
+      return 'ok'
+    }
+  }
 }

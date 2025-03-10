@@ -75,4 +75,13 @@ export class ProductsController {
   getInterestingProducts() {
     return this.productsService.getInterestingProducts()
   }
+
+  @Post('add-to-cart')
+  @ResponseMessage('add product to cart')
+  addToCart(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.productsService.addToCart(req.user._id, body)
+  }
 }

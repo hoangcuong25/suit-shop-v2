@@ -79,22 +79,21 @@ const Page = () => {
         }
     }
 
-    const addToCard = async () => {
+    const addToCart = async () => {
         try {
             setLoadingAddToCart(true)
 
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/add-to-card', { productId, size, length })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/add-to-cart', { productId, size, length })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 loadUserProfileData()
                 toast.success("Add to card successfully")
-            } else {
-                toast.warning("Chose size and length")
             }
 
             setLoadingAddToCart(false)
         }
         catch (error: any) {
+            setLoadingAddToCart(false)
             toast.error(error.response?.data?.message || "Something went wrong")
         }
     }
@@ -345,7 +344,7 @@ const Page = () => {
                             Loading...
                         </Button>
                         : <Button
-                            onClick={addToCard}
+                            onClick={addToCart}
                             className='mt-5 py-6 text-lg font-semibold'>
                             Add To Cart
                         </Button>
