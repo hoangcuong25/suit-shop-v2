@@ -229,4 +229,26 @@ export class ProductsService {
       return 'ok'
     }
   }
+
+  async removeFromCart(userId, productId) {
+    const user = await this.userModel.findById(userId)
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    let indexProduct = 0
+    const cart = user.cart
+
+    cart.forEach((i, index) => {
+      if (i.product._id.toString() === productId) {
+        indexProduct = index
+      }
+    })
+
+    cart.splice(indexProduct, 1)
+    await this.userModel.findByIdAndUpdate(userId, { cart })
+
+    return 'ok'
+  }
 }

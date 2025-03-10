@@ -31,9 +31,9 @@ const Cart: React.FC<Props> = ({ show, setShow, empty }) => {
         setLoadingDelete(true)
 
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/remove-from-cart', { productId })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/remove-from-cart', { productId })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Xóa khỏi giỏ hàng thành công')
                 loadUserProfileData()
             }

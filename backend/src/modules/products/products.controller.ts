@@ -84,4 +84,13 @@ export class ProductsController {
   ) {
     return this.productsService.addToCart(req.user._id, body)
   }
+
+  @Post('remove-from-cart')
+  @ResponseMessage('remove product from cart')
+  removeFromCart(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.productsService.removeFromCart(req.user._id, body.productId)
+  }
 }
