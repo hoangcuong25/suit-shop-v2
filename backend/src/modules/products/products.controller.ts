@@ -72,4 +72,10 @@ export class ProductsController {
     return this.productsService.wishlist(body.productId, req.user)
   }
 
+  @Get('get-interesting-products')
+  @ResponseMessage('get interesting products')
+  @Public()
+  getInterestingProducts() {
+    return this.productsService.getInterestingProducts()
+  }
 }

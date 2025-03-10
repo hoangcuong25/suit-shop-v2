@@ -7,6 +7,8 @@ import { Product } from './schemas/product.schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/schemas/user.schems';
+import Redis from 'ioredis';
+import { InjectRedis } from '@nestjs-modules/ioredis';
 
 @Injectable()
 export class ProductsService {
@@ -14,6 +16,7 @@ export class ProductsService {
   constructor(
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectRedis() private readonly redis: Redis,
     private readonly cloudinaryService: CloudinaryService,
     private usersService: UsersService,
   ) { }
@@ -161,5 +164,18 @@ export class ProductsService {
     }
   }
 
+  async getInterestingProducts() {
+    const cacheKey = 'interestingProducts';
 
+    const cachedData = await this.redis.get(cacheKey);
+    if (cachedData) {
+      return JSON.parse(cachedData)
+    }
+
+    const interestingProducts = await this.productModel.find({ interesting: true });
+
+    await this.redis.setex(cacheKey, 60 * 60, JSON.stringify(interestingProducts));
+
+    return interestingProducts
+  }
 }

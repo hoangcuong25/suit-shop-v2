@@ -22,8 +22,8 @@ const Interested = () => {
 
     const getInterestingProducts = async (): Promise<any> => {
         try {
-            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/get-interesting-products')
-            setInterestingProducts(data.interestingProducts)
+            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/get-interesting-products')
+            setInterestingProducts(data.dataRes)
         }
         catch (error: any) {
             toast.error(error.response?.data?.message || "Something went wrong")
