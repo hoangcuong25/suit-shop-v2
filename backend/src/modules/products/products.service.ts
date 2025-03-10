@@ -55,7 +55,7 @@ export class ProductsService {
     return 'ok'
   }
 
-  async findAll(limit = 15, page = 1, type?: string, price_option?: string, sort?: string) {
+  async fetchProduct(limit = 15, page = 1, type?: string, price_option?: string, sort?: string) {
     const filter: any = {};
 
     if (type) {

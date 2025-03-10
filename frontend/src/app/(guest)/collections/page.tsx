@@ -79,9 +79,9 @@ const Content = ({ router, pathName, wishlistProduct, isWishlist }: any) => {
 
     const getProduct = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/all-product")
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/fetch-product", { limit, page, type, price_option, sort })
 
-            if (data.statusCode === 200) {
+            if (data.statusCode === 201) {
                 setProductData(data.dataRes.productData)
                 generatePages(data.dataRes.remmainProducts, limit)
                 setRemainProducts(data.dataRes.remmainProducts)

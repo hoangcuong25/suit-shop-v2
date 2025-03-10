@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors, Req, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Public, ResponseMessage, Roles } from 'src/decorator/customize';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { query } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -20,17 +21,13 @@ export class ProductsController {
     return this.productsService.create(createProductDto, images)
   }
 
-  @Get('all-product')
-  @ResponseMessage('find all product')
+  @Post('fetch-product')
+  @ResponseMessage('fetch product')
   @Public()
   findAll(
-    @Param('limit') limit: number,
-    @Param('page') page: number,
-    @Param('type') type: string,
-    @Param('price_option') price_option: string,
-    @Param('sort ') sort: string,
+    @Body() body
   ) {
-    return this.productsService.findAll(limit, page, type, price_option, sort);
+    return this.productsService.fetchProduct(body?.limit, body?.page, body?.type, body?.price_option, body?.sort)
   }
 
   @Post('get-product-by-id')
