@@ -49,9 +49,9 @@ const Cart: React.FC<Props> = ({ show, setShow, empty }) => {
         setLoading(true)
 
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/increase-quantity', { productId, size, length })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/increase-quantity', { productId, size, length })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 loadUserProfileData()
             }
         }
@@ -66,9 +66,9 @@ const Cart: React.FC<Props> = ({ show, setShow, empty }) => {
         setLoading(true)
 
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/decrease-quantity', { productId, size, length })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/decrease-quantity', { productId, size, length })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 loadUserProfileData()
             }
         }

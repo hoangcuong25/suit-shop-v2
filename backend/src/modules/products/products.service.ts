@@ -251,4 +251,58 @@ export class ProductsService {
 
     return 'ok'
   }
+
+  async increaseQuantity(userId, body) {
+    const { productId, size, length } = body
+
+    const user = await this.userModel.findById(userId)
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const cart = user.cart
+
+    const indexProduct = cart.findIndex(i =>
+      i.product._id.toString() === productId &&
+      i.amount.size === size &&
+      i.amount.length === length
+    )
+
+    cart[indexProduct].amount.quantity += 1
+
+    await this.userModel.findByIdAndUpdate(userId, { cart })
+    return 'ok'
+  }
+
+  async decreaseQuantity(userId, body) {
+    const { productId, size, length } = body;
+
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const cart = user.cart;
+
+    const indexProduct = cart.findIndex(i =>
+      i.product._id.toString() === productId &&
+      i.amount.size === size &&
+      i.amount.length === length
+    );
+
+    if (indexProduct === -1) {
+      throw new BadRequestException('Product not found in cart');
+    }
+
+    if (cart[indexProduct].amount.quantity === 1) {
+      cart.splice(indexProduct, 1);
+    } else {
+      cart[indexProduct].amount.quantity -= 1;
+    }
+
+    await this.userModel.findByIdAndUpdate(userId, { cart });
+
+    return 'ok'
+  }
 }

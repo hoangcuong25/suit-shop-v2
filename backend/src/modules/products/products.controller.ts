@@ -93,4 +93,22 @@ export class ProductsController {
   ) {
     return this.productsService.removeFromCart(req.user._id, body.productId)
   }
+
+  @Post('increase-quantity')
+  @ResponseMessage('increase quantity product')
+  increaseQuantity(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.productsService.increaseQuantity(req.user._id, body)
+  }
+
+  @Post('decrease-quantity')
+  @ResponseMessage('decrease quantity product')
+  decreaseQuantity(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.productsService.decreaseQuantity(req.user._id, body)
+  }
 }
