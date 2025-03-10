@@ -62,4 +62,14 @@ export class ProductsController {
   getRate(@Body() body) {
     return this.productsService.getRate(body.productId)
   }
+
+  @Post('wishlist')
+  @ResponseMessage('wishlist product')
+  wishlist(
+    @Body() body,
+    @Req() req
+  ) {
+    return this.productsService.wishlist(body.productId, req.user)
+  }
+
 }

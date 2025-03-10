@@ -94,10 +94,10 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
 
     const wishlistProduct = async (productId: string): Promise<void> => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/wishlist', { productId })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/wishlist', { productId })
 
-            if (data.success) {
-                toast.success(data.message)
+            if (data.statusCode === 201) {
+                toast.success(data.dataRes)
                 loadUserProfileData()
             }
         }

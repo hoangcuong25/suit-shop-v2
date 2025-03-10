@@ -6,13 +6,14 @@ import { Model } from 'mongoose';
 import { Product } from './schemas/product.schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UsersService } from '../users/users.service';
+import { User } from '../users/schemas/user.schems';
 
 @Injectable()
 export class ProductsService {
 
   constructor(
-    @InjectModel('Product')
-    private productModel: Model<Product>,
+    @InjectModel('Product') private productModel: Model<Product>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cloudinaryService: CloudinaryService,
     private usersService: UsersService,
   ) { }
@@ -127,4 +128,38 @@ export class ProductsService {
 
     return product.rate
   }
+
+  async wishlist(productId, user) {
+    const userData = await this.usersService.findById(user._id)
+    const productData = await this.productModel.findById(productId)
+
+    if (!userData) {
+      throw new BadRequestException('User not found');
+    }
+
+    let isProduct = false
+    let indexProduct = 0
+
+    userData.wishlist.forEach((i, index) => {
+      if (i._id.toString() === productId) {
+        isProduct = true
+        indexProduct = index
+      }
+    })
+
+    if (isProduct) {
+      const wishlist = userData.wishlist
+      wishlist.splice(indexProduct, 1)
+      await this.userModel.findByIdAndUpdate(user._id, { wishlist })
+
+      return 'Remove from success list'
+    } else {
+      const wishlistData = [...userData.wishlist, productData]
+      await this.userModel.findByIdAndUpdate(user._id, { wishlist: wishlistData })
+
+      return 'Add to list successfuly'
+    }
+  }
+
+
 }
