@@ -10,6 +10,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -65,6 +66,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       }),
       inject: [ConfigService],
     }),
+
+    OrdersModule,
 
   ],
   controllers: [AppController],

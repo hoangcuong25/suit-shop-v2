@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -14,7 +15,7 @@ import { CiDiscount1 } from 'react-icons/ci';
 
 const Payment = () => {
 
-    const { token, totalPrice, loadUserProfileData, cart, getOrder, coupon, getCoupon, setReqOrderData, reqOrderData } = useContext(AppContext)
+    const { token, totalPrice, loadUserProfileData, cart, getOrder, coupon, getCoupon } = useContext(AppContext)
 
     const router = useRouter()
 
@@ -50,9 +51,9 @@ const Payment = () => {
     const order = async (): Promise<void> => {
         setLoading(true)
 
-        if (!Array.isArray(cart)) return
+        let isPay = false
 
-        const isPay = false
+        if (!Array.isArray(cart)) return
 
         try {
             cart.map((i: any) => {
@@ -64,17 +65,13 @@ const Payment = () => {
                 })
             })
 
-            const orderData = { productInfor, subtotal, optionShip, optionPayment, codeUse, isPay };
-            setReqOrderData(orderData)
-
             if (optionPayment !== 'Cash on Delivery') {
-                window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payment/create_payment_url?amount=${subtotal}`
-                return
+                isPay = true
             }
 
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/order', reqOrderData)
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/orders/order', { productInfor, subtotal, optionShip, optionPayment, isPay, codeUse })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Order successful')
                 scrollTo(0, 0)
                 loadUserProfileData()
@@ -189,6 +186,12 @@ const Payment = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {
+                            optionPayment === 'Payment by bank transfer' &&
+                            // eslint-disable-next-line jsx-a11y/alt-text
+                            <img src={`https://img.vietqr.io/image/MB-0251125112003-print.png?amount=${subtotal * 25110}&addInfo=chuyen tien&accountName=HOANG VAN CUONG`} className="w-96" />
+                        }
                     </div>
 
                     <div className='flex flex-col mt-3'>
@@ -215,14 +218,19 @@ const Payment = () => {
                             </p>
 
                             <div className={`${isShow ? 'flex flex-col gap-5' : 'hidden'} absolute right-0 z-50 p-5 rounded-md bg-gray-100 border-gray-200`} >
-                                {coupon && coupon.map((c, index) => (
-                                    <div key={index} className='flex items-center gap-2 text-nowrap'>
-                                        <CiDiscount1 className='text-2xl' />
-                                        <p>Code: {c.code} - </p>
-                                        <p>{c.discount}$ discount</p>
-                                        <Button className='ml-5' onClick={() => setChoseCoupon(`${c.code}`)}>Apply</Button>
-                                    </div>
-                                ))
+                                {
+                                    coupon && coupon.length !== 0
+                                        ? coupon.map((c, index) => (
+                                            <div key={index} className='flex items-center gap-2 text-nowrap'>
+                                                <CiDiscount1 className='text-2xl' />
+                                                <p>Code: {c.code} - </p>
+                                                <p>{c.discount}$ discount</p>
+                                                <Button className='ml-5' onClick={() => setChoseCoupon(`${c.code}`)}>Apply</Button>
+                                            </div>
+                                        ))
+                                        : <div>
+                                            <p>You do not have any coupon</p>
+                                        </div>
                                 }
                             </div>
                         </div>
