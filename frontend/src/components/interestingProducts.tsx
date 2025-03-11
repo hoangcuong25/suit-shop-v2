@@ -11,13 +11,12 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import axiosClient from '@/lib/axiosClient';
+import { motion } from "framer-motion";
 
 const Interested = () => {
 
     const { wishlistProduct, isWishlist } = useContext(AppContext)
-
     const router = useRouter()
-
     const [interestingProducts, setInterestingProducts] = useState<ProductData[] | false>(false)
 
     const getInterestingProducts = async (): Promise<any> => {
@@ -44,34 +43,39 @@ const Interested = () => {
         autoplaySpeed: 2000,
         arrows: false,
         responsive: [
-            {
-                breakpoint: 1300,
-                settings: {
-                    slidesToShow: 4,
-                }
-            },
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                }
-            }
+            { breakpoint: 1300, settings: { slidesToShow: 4 } },
+            { breakpoint: 1024, settings: { slidesToShow: 3 } },
+            { breakpoint: 600, settings: { slidesToShow: 2 } }
         ]
     }
 
     return (
-        <div className='flex flex-col gap-5 mt-10'>
-            <span className='text-lg md:text-2xl font-semibold w-fit border-b border-gray-500'>Interesting products:</span>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className='flex flex-col gap-5 mt-10'
+        >
+            <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className='text-lg md:text-2xl font-semibold w-fit border-b border-gray-500'
+            >
+                Interesting products:
+            </motion.span>
+
             <Slider {...setting}>
                 {interestingProducts && interestingProducts?.slice(0, 8).map((product: any, index: number) => {
                     return (
-                        <div key={index} className='relative'>
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                            className='relative'
+                        >
                             <div
                                 onClick={() => router.push(`/collections/${product._id}`)}
                                 className='group cursor-pointer'
@@ -84,21 +88,21 @@ const Interested = () => {
                                 </div>
                             </div>
 
-                            <div
+                            <motion.div
+                                whileTap={{ scale: 0.8 }}
                                 onClick={() => wishlistProduct(product._id)}
                                 className='absolute z-40 top-2 2xl:right-10 right-2 text-xl hover:scale-110 cursor-pointer'
                             >
-
                                 {isWishlist(product._id)
                                     ? <FaHeart className='text-red-500' />
-                                    : < FaRegHeart className='text-gray-800' />
+                                    : <FaRegHeart className='text-gray-800' />
                                 }
-                            </div>
-                        </div>
+                            </motion.div>
+                        </motion.div>
                     )
                 })}
             </Slider>
-        </div>
+        </motion.div>
     )
 }
 

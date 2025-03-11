@@ -245,7 +245,8 @@ export class AuthService {
         phone: "Unknown",
         password: hashedPassword,
         dob: "Unknown",
-        image
+        image,
+        isActive: true
       }
 
       const user = await this.usersService.createWithGoole(userData)

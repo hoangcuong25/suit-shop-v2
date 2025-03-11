@@ -31,6 +31,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { AppContext } from '@/context/AppContext';
 import axiosClient from '@/lib/axiosClient';
+import { motion } from "framer-motion";
 
 const Page = () => {
 
@@ -234,13 +235,27 @@ const Content = ({ router, pathName, wishlistProduct, isWishlist }: any) => {
                 <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center gap-3'>
                     {
                         productData?.map((product, index) => (
-                            <div key={index} className='relative'>
+                            <motion.div
+                                key={index}
+                                className='relative'
+                                whileHover={{ scale: 1.05, boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)" }}
+                                transition={{ duration: 0.3 }}
+                            >
                                 <div
                                     onClick={() => router.push(`/collections/${product._id}`)}
                                     className='group cursor-pointer'
                                 >
-                                    <Image src={product.image1} height={500} width={500} quality={100} alt='product' className='w-96 h-auto' />
-                                    <p className='mt-2 mb-0 md:mb-3 text-sm md:text-base group-hover:underline underline-offset-2 md:underline-offset-8'>{product.name}</p>
+                                    <Image
+                                        src={product.image1}
+                                        height={500}
+                                        width={500}
+                                        quality={100}
+                                        alt='product'
+                                        className='w-96 h-auto'
+                                    />
+                                    <p className='mt-2 mb-0 md:mb-3 text-sm md:text-base group-hover:underline underline-offset-2 md:underline-offset-8'>
+                                        {product.name}
+                                    </p>
                                     <div className='flex gap-2'>
                                         <p className='text-[13px] md:text-sm text-gray-600 font-semibold'>{product.newPrice},00 US$</p>
                                         <p className='text-[13px] md:text-sm text-gray-400 line-through font-semibold'>{product.oldPrice},00 US$</p>
@@ -251,13 +266,12 @@ const Content = ({ router, pathName, wishlistProduct, isWishlist }: any) => {
                                     onClick={() => wishlistProduct(product._id)}
                                     className='absolute z-40 top-2 2xl:right-10 right-2 text-xl hover:scale-110 cursor-pointer'
                                 >
-
                                     {isWishlist(product._id)
                                         ? <FaHeart className='text-red-500' />
-                                        : < FaRegHeart className='text-gray-800' />
+                                        : <FaRegHeart className='text-gray-800' />
                                     }
                                 </div>
-                            </div>
+                            </motion.div>
                         ))
                     }
                 </div>
