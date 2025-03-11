@@ -32,9 +32,9 @@ const Products = () => {
         setLoading(true)
 
         try {
-            const { data } = await axios.delete(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/admin/delete-product", { data: { productId } })
+            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/delete-product", { productId } )
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Product deleted successfully')
                 getAllProduct()
             }

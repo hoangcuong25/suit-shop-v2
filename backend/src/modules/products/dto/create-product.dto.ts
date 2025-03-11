@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsArray, ArrayMinSize, ArrayMaxSize } from 'class-validator';
+import { IsNotEmpty} from 'class-validator';
 
 export class CreateProductDto {
     @IsNotEmpty({ message: 'Name cannot be empty' })

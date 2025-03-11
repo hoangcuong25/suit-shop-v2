@@ -34,10 +34,10 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     const getAllUser = async (): Promise<void> => {
         try {
-            const { data } = await axios.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/admin/get-all-user')
+            const { data } = await axios.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/users/get-all-user')
 
-            if (data.success) {
-                setUsers(data.users)
+            if (data.statusCode === 200) {
+                setUsers(data.dataRes)
             }
 
         } catch (error: any) {
@@ -49,10 +49,10 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     const getAllProduct = async (): Promise<void> => {
         try {
-            const { data } = await axios.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/admin/get-all-product')
+            const { data } = await axios.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/get-all-product')
 
-            if (data.success) {
-                setProducts(data.products)
+            if (data.statusCode === 200) {
+                setProducts(data.dataRes)
             }
 
         } catch (error: any) {

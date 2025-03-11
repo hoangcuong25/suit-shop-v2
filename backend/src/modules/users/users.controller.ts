@@ -14,12 +14,16 @@ export class UsersController {
   ) { }
 
   @Post('create')
+  @ResponseMessage('create user')
+  @Public()
   @Roles('admin')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get('find-all')
+  @Get('get-all-user')
+  @ResponseMessage('get all user')
+  @Public()
   @Roles('admin')
   findAll() {
     return this.usersService.findAll();

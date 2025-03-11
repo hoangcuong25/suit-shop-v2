@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -25,6 +25,10 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto, images) {
     const { name, type, oldPrice, newPrice } = createProductDto
+
+    if (!name || !type || !oldPrice || !newPrice) {
+      throw new BadGatewayException('Missing filed')
+    }
 
     if (!images || images.length !== 2) {
       throw new BadRequestException('You have to upload 2 image')
@@ -93,8 +97,8 @@ export class ProductsService {
     return productData
   }
 
-  async deleteProduct(_id: string) {
-    await this.productModel.findByIdAndDelete(_id)
+  async deleteProduct(productId) {
+    await this.productModel.findByIdAndDelete(productId)
     return 'ok';
   }
 
@@ -354,6 +358,12 @@ export class ProductsService {
     }
 
     const products = await this.productModel.find(searchCriteria)
+    return products
+  }
+
+  async getAllProduct() {
+    const products = await this.productModel.find()
+
     return products
   }
 }
