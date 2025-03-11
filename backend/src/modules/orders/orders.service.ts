@@ -66,12 +66,14 @@ export class OrdersService {
     return 'ok'
   }
 
-  findAll() {
-    return `This action returns all orders`;
+  async findAll(userId) {
+    const orderData = await this.orderModel.find({ userId })
+
+    return orderData
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number) {
+    return 'ok'
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto) {

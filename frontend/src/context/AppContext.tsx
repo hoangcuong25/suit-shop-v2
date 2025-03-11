@@ -121,10 +121,10 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => 
 
     const getOrder = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/get-order')
+            const { data } = await axiosClient.get(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/orders/get-orders')
 
-            if (data.success) {
-                setOrder(data.orderData)
+            if (data.statusCode === 200) {
+                setOrder(data.dataRes)
             }
         }
         catch (error: any) {

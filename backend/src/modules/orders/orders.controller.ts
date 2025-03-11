@@ -17,9 +17,9 @@ export class OrdersController {
     return this.ordersService.create(req.user._id, body);
   }
 
-  @Get()
-  findAll() {
-    return this.ordersService.findAll();
+  @Get('get-orders')
+  findAll(@Req() req) {
+    return this.ordersService.findAll(req.user._id);
   }
 
   @Get(':id')
