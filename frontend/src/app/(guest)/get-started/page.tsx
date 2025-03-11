@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
 
+export const metadata = {
+    title: "Wedding Suits & Tuxedos | SUIT SHOP",
+    description: "Find out why buying a wedding suit or tuxedo is better than renting. Explore our catalog, book virtual appointments, and order fabric swatches.",
+};
+
 const page = () => {
     return (
         <div className='mt-10 px-3.5 md:px-7 xl:px-16 flex flex-col gap-12 text-center'>

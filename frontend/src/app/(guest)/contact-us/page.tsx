@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
 
+export const metadata = {
+    title: "Contact Us | SUIT SHOPZ",
+    description: "Get in touch with our support team for inquiries, returns, and assistance.",
+};
+
 const page = () => {
     return (
         <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">

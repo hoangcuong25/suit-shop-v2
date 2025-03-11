@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
 
+export const metadata = {
+    title: "Fit Comparison Guide | SUIT SHOP",
+    description: "Explore our detailed fit comparison to find the perfect suit for your body type.",
+};
+
 const page = () => {
     return (
         <div className='mt-10 flex flex-col gap-12 text-center'>
