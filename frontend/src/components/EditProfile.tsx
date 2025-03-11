@@ -96,11 +96,11 @@ const EditProfile = ({ setShow, show }: Props) => {
 
     const updatePassword = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.put(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/update-password', { oldPassword, newPassword1, newPassword2 })
+            const { data } = await axiosClient.patch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/users/update-password', { oldPassword, newPassword1, newPassword2 })
 
-            if (data.success) {
+            if (data.statusCode === 200) {
                 toast.success('Password changed successfully')
-                // loadProductData()
+                loadUserProfileData()
             } else {
                 toast.error(data.message)
             }
@@ -114,11 +114,11 @@ const EditProfile = ({ setShow, show }: Props) => {
         e.preventDefault()
 
         try {
-            const { data } = await axiosClient.put(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/update-phone', { phone })
+            const { data } = await axiosClient.patch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/users/update-phone', { phone })
 
-            if (data.success) {
+            if (data.statusCode === 200) {
                 toast.success('Change phone number successfully')
-                loadUserProfileData();
+                loadUserProfileData()
             }
 
         }
