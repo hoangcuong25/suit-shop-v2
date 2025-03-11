@@ -340,4 +340,20 @@ export class ProductsService {
 
     return 'ok'
   }
+
+  async search(query) {
+    if (!query) {
+      throw new BadRequestException('Query parameter is required and must be a string')
+    }
+
+    const searchCriteria = {
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { type: { $regex: query, $options: 'i' } }
+      ]
+    }
+
+    const products = await this.productModel.find(searchCriteria)
+    return products
+  }
 }

@@ -120,4 +120,11 @@ export class ProductsController {
   ) {
     return this.productsService.decreaseQuantity(req.user._id, body)
   }
+
+  @Get('search')
+  @Public()
+  @ResponseMessage('search products')
+  search(@Query() query) {
+    return this.productsService.search(query.query)
+  }
 }

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 
 export const metadata = {
-    title: "Contact Us | SUIT SHOPZ",
+    title: "Contact Us | SUIT SHOP",
     description: "Get in touch with our support team for inquiries, returns, and assistance.",
 };
 

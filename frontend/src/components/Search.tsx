@@ -29,14 +29,14 @@ const Search = () => {
 
         try {
             const { data } = await axiosClient.get(
-                process.env.NEXT_PUBLIC_BACKEND_URL + "/api/user/search",
+                process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/search",
                 {
                     params: { query }
                 }
             )
 
-            if (data.success) {
-                setSearchProducts(data.products)
+            if (data.statusCode === 200) {
+                setSearchProducts(data.dataRes)
             } else {
                 toast.warning("No products found!")
             }
@@ -78,7 +78,7 @@ const Search = () => {
                             {isSearch && <TiDeleteOutline onClick={handleClearSearch} className='mr-2 text-gray-500 text-xl cursor-pointer' />}
                         </div>
 
-                        {isSearch && searchProducts.length != 0 && (
+                        {isSearch && searchProducts && (
                             <div
                                 className={`flex flex-col gap-3.5 mt-3 bg-stone-100 rounded-md text-black md:h-[500px] h-96 overflow-y-scroll text-start`}
                             >
