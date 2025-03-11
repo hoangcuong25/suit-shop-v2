@@ -33,11 +33,11 @@ const Payment = () => {
 
     const handleDiscount = async (): Promise<void> => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/coupon/validate-coupon', { choseCoupon })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/coupon/validate-coupon', { choseCoupon })
 
-            if (data.success) {
-                setDiscount(data.discount)
-                setCodeUse(data.coupon.code)
+            if (data.statusCode === 201) {
+                setDiscount(data.dataRes.discount)
+                setCodeUse(data.dataRes.coupon.code)
                 toast.success('Apply successfully')
             }
         }

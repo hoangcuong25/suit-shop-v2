@@ -22,4 +22,13 @@ export class CouponController {
   getCoupon(@Req() req) {
     return this.couponService.getCoupon(req.user._id)
   }
+
+  @Post('validate-coupon')
+  @ResponseMessage('validate coupon')
+  validateCoupon(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.couponService.validateCoupon(req.user._id, body.choseCoupon)
+  }
 }

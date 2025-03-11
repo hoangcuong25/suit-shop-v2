@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { Coupon } from './schemas/coupon.shema';
@@ -66,5 +66,16 @@ export class CouponService {
     return coupons
   }
 
-  
+  async validateCoupon(userId, choseCoupon) {
+    const coupon = await this.couponModel.findOne({ code: choseCoupon, userId: userId, isActive: true });
+
+    if (!coupon) {
+      throw new BadRequestException('Coupon not found')
+    }
+
+    return {
+      coupon: coupon,
+      discount: coupon.discount,
+    }
+  }
 }
