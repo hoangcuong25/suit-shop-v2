@@ -120,9 +120,9 @@ const Page = () => {
 
     const ratingProduct = async (rate: number) => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/user/rate-product', { productId, rate })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/products/rating-product', { productId, rate })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Rating this product successfully')
                 getRate()
             }

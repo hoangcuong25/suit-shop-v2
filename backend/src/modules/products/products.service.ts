@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { User } from '../users/schemas/user.schems';
 import Redis from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
+import { Order } from '../orders/schemas/order.schema';
 
 @Injectable()
 export class ProductsService {
@@ -16,6 +17,7 @@ export class ProductsService {
   constructor(
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Order.name) private readonly orderModel: Model<Order>,
     @InjectRedis() private readonly redis: Redis,
     private readonly cloudinaryService: CloudinaryService,
     private usersService: UsersService,
@@ -130,6 +132,39 @@ export class ProductsService {
     }
 
     return product.rate
+  }
+
+  async ratingProduct(userId, body) {
+    const { productId, rate } = body
+
+    if (!userId || !productId || rate < 1 || rate > 5) {
+      throw new BadRequestException('Invalid input')
+    }
+
+    const product = await this.productModel.findById(productId);
+    if (!product) {
+      throw new BadRequestException('Product not found')
+    }
+
+    const orders = await this.orderModel.find({ userId: userId, isPay: true })
+
+    const isBuy = orders.some((order) =>
+      order.productList.some((product) => product.productList._id.toString() === productId)
+    )
+
+    if (!isBuy) {
+      throw new BadRequestException('You can only rate products you have purchased and paid for')
+    }
+
+    const alreadyRated = product.rate.some((i) => i.userId.toString() === userId)
+    if (alreadyRated) {
+      throw new BadRequestException('You have already rated this product')
+    }
+
+    const rateData = { userId, rate };
+    await this.productModel.findByIdAndUpdate(productId, { $push: { rate: rateData } })
+
+    return 'ok'
   }
 
   async wishlist(productId, user) {

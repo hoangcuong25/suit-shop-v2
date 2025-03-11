@@ -53,6 +53,15 @@ export class ProductsController {
     return this.productsService.comment(req.user, body)
   }
 
+  @Post('rating-product')
+  @ResponseMessage('rating product')
+  ratingProduct(
+    @Req() req,
+    @Body() body
+  ) {
+    return this.productsService.ratingProduct(req.user._id, body)
+  }
+
   @Post('get-rates')
   @ResponseMessage('get rate of product')
   @Public()
