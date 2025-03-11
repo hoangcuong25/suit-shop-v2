@@ -17,23 +17,9 @@ export class CouponController {
     return this.couponService.create(req.user._id, body.coupon);
   }
 
-  @Get()
-  findAll() {
-    return this.couponService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.couponService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCouponDto: UpdateCouponDto) {
-    return this.couponService.update(+id, updateCouponDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.couponService.remove(+id);
+  @Get('get-coupon')
+  @ResponseMessage('get coupon')
+  getCoupon(@Req() req) {
+    return this.couponService.getCoupon(req.user._id)
   }
 }

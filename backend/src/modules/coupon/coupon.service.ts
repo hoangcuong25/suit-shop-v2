@@ -60,19 +60,11 @@ export class CouponService {
     }
   }
 
-    findAll() {
-      return `This action returns all coupon`;
-    }
+  async getCoupon(userId) {
+    const coupons = await this.couponModel.find({ userId: userId, isActive: true });
 
-    findOne(id: number) {
-      return `This action returns a #${id} coupon`;
-    }
-
-    update(id: number, updateCouponDto: UpdateCouponDto) {
-      return `This action updates a #${id} coupon`;
-    }
-
-    remove(id: number) {
-      return `This action removes a #${id} coupon`;
-    }
+    return coupons
   }
+
+  
+}
