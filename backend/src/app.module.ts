@@ -11,6 +11,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { CouponModule } from './modules/coupon/coupon.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     ProductsModule,
     AuthModule,
     CloudinaryModule,
+    OrdersModule,
 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -67,8 +69,7 @@ import { OrdersModule } from './modules/orders/orders.module';
       inject: [ConfigService],
     }),
 
-    OrdersModule,
-
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [

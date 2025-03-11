@@ -22,9 +22,9 @@ const Point = ({ setShow, show }: Props) => {
 
     const buyCounpon = async (coupon: string): Promise<void> => {
         try {
-            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/coupon/buy-coupon', { coupon })
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/coupon/buy-coupon', { coupon })
 
-            if (data.success) {
+            if (data.statusCode === 201) {
                 toast.success('Buy successfully')
                 loadUserProfileData()
                 getCoupon()

@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { User } from 'src/modules/users/schemas/user.schems';
 
 export type OrderDocument = HydratedDocument<Order>;
 
 @Schema({ timestamps: true, minimize: false })
 export class Order {
-    @Prop({ type: String, required: true, ref: User.name })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, required: true, ref: User.name })
     userId: string
 
     @Prop({ type: String, default: 'Processing' })
