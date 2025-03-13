@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SUIT SHOP | ADMIN",
+  title: "SUIT SHOP",
   description: "SUIT SHOP",
 };
 
