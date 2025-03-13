@@ -12,6 +12,8 @@ import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { CouponModule } from './modules/coupon/coupon.module';
+import { MessageModule } from './modules/message/message.module';
+import { ChatGateway } from './modules/message/chat.gateway';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { CouponModule } from './modules/coupon/coupon.module';
     AuthModule,
     CloudinaryModule,
     OrdersModule,
+    CouponModule,
+    MessageModule,
 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -69,11 +73,11 @@ import { CouponModule } from './modules/coupon/coupon.module';
       inject: [ConfigService],
     }),
 
-    CouponModule,
   ],
   controllers: [AppController],
   providers: [
-    AppService
+    AppService,
+    ChatGateway,
   ],
 })
 export class AppModule { }
