@@ -13,7 +13,6 @@ export class ProductsController {
   @Post('add-product')
   @ResponseMessage('add product')
   @Roles('admin')
-  @Public()
   @UseInterceptors(FilesInterceptor('images', 2))
   create(
     @Body() createProductDto,
@@ -40,7 +39,6 @@ export class ProductsController {
 
   @Post('delete-product')
   @ResponseMessage('delete product')
-  @Public()
   @Roles('admin')
   deleteProduct(@Body() body) {
     return this.productsService.deleteProduct(body.productId)
@@ -133,8 +131,13 @@ export class ProductsController {
   @Get('get-all-product')
   @ResponseMessage('search products')
   @Roles('admin')
-  @Public()
   getAllProduct() {
     return this.productsService.getAllProduct()
+  }
+
+  @Patch('add-to-interesting-products')
+  @Roles('admin')
+  addToInterestingProducts(@Body() body) {
+    return this.productsService.addToInterestingProducts(body.productId)
   }
 }

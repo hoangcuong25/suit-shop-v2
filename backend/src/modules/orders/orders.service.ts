@@ -6,6 +6,7 @@ import { User } from '../users/schemas/user.schems';
 import { Model } from 'mongoose';
 import { Product } from '../products/schemas/product.schema';
 import { Order } from './schemas/order.schema';
+import { Coupon } from '../coupon/schemas/coupon.shema';
 
 @Injectable()
 export class OrdersService {
@@ -14,6 +15,7 @@ export class OrdersService {
     @InjectModel('User') private userModel: Model<User>,
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('Order') private orderModel: Model<Order>,
+    @InjectModel('Order') private couponModel: Model<Coupon>,
   ) { }
 
   async create(userId, body) {
@@ -54,33 +56,29 @@ export class OrdersService {
       }
     }
 
-    // if (codeUse) {
-    //   const coupon = await this.couponModel.findOne({ userId: userId, code: codeUse })
-    //   const couponId = coupon._id
-    //   const newIsActive = false
-    //   await couponModel.findByIdAndUpdate(couponId, { isActive: newIsActive })
-    // }
+    if (codeUse) {
+      const coupon = await this.couponModel.findOne({ userId: userId, code: codeUse })
+      if (coupon) {
+        const couponId = coupon._id
+        const newIsActive = false
+        await this.couponModel.findByIdAndUpdate(couponId, { isActive: newIsActive })
+      }
+    }
 
     await this.userModel.findByIdAndUpdate(userId, { cart: cart })
 
     return 'ok'
   }
 
-  async findAll(userId) {
+  async getOrder(userId) {
     const orderData = await this.orderModel.find({ userId })
 
     return orderData
   }
 
-  async findOne(id: number) {
-    return 'ok'
-  }
+  async getAllOrder() {
+    const orders = await this.orderModel.find()
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+    return orders
   }
 }

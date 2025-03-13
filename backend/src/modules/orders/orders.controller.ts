@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { ResponseMessage } from 'src/decorator/customize';
+import { ResponseMessage, Roles } from 'src/decorator/customize';
 
 @Controller('orders')
 export class OrdersController {
@@ -18,22 +18,13 @@ export class OrdersController {
   }
 
   @Get('get-orders')
-  findAll(@Req() req) {
-    return this.ordersService.findAll(req.user._id);
+  getOrder(@Req() req) {
+    return this.ordersService.getOrder(req.user._id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ordersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(+id, updateOrderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ordersService.remove(+id);
+  @Get('get-all-orders')
+  @Roles('admin')
+  getAllOrder() {
+    return this.ordersService.getAllOrder()
   }
 }

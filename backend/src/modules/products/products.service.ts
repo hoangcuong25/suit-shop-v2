@@ -366,4 +366,23 @@ export class ProductsService {
 
     return products
   }
+
+  async addToInterestingProducts(productId) {
+    const product = await this.productModel.findById(productId)
+
+    if (!product) {
+      throw new BadRequestException('Product not found');
+    }
+
+    const newInteresting = !product.interesting;
+    await this.productModel.findByIdAndUpdate(productId, { interesting: newInteresting });
+
+    await this.redis.del('interestingProducts')
+
+    if (product.interesting) {
+      return "Remove from interesting products successfully"
+    } else {
+      return "Add to interesting products successfully"
+    }
+  }
 }

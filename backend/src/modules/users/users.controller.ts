@@ -15,7 +15,6 @@ export class UsersController {
 
   @Post('create')
   @ResponseMessage('create user')
-  @Public()
   @Roles('admin')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -23,7 +22,6 @@ export class UsersController {
 
   @Get('get-all-user')
   @ResponseMessage('get all user')
-  @Public()
   @Roles('admin')
   findAll() {
     return this.usersService.findAll();
@@ -66,5 +64,10 @@ export class UsersController {
     return this.usersService.updatePassword(req.user, reqBody)
   }
 
-  // @Delete('delete-user')
+  @Delete('delete-user/:id')
+  @Roles('admin')
+  deleteUser(@Param('id') userId: string) {
+    return this.usersService.deleteUser(userId)
+  }
+
 }

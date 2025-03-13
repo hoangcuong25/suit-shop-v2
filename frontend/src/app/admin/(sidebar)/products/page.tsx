@@ -4,7 +4,6 @@
 import { useContext, useState } from 'react'
 import { FaVest } from "react-icons/fa";
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { AiOutlineReload } from 'react-icons/ai'
 import Image from 'next/image'
 import { AdminContext } from '@/context/AdminContext'
@@ -20,6 +19,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import axiosClient from '@/lib/axiosClient';
 
 const Products = () => {
 
@@ -32,7 +32,7 @@ const Products = () => {
         setLoading(true)
 
         try {
-            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/delete-product", { productId } )
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/delete-product", { productId })
 
             if (data.statusCode === 201) {
                 toast.success('Product deleted successfully')
@@ -52,10 +52,10 @@ const Products = () => {
         setLoadingInterestingProduct(true)
 
         try {
-            const { data } = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/admin/add-to-interesting-products", { productId })
+            const { data } = await axiosClient.patch(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/products/add-to-interesting-products", { productId })
 
-            if (data.success) {
-                toast.success(data.message)
+            if (data.statusCode === 200) {
+                toast.success(data.dataRes)
                 getAllProduct()
             }
         }

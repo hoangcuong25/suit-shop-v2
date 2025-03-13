@@ -215,4 +215,10 @@ export class UsersService {
 
     return 'ok'
   }
+
+  async deleteUser(userId) {
+    await this.userModel.findByIdAndDelete(userId)
+
+    return 'ok'
+  }
 }

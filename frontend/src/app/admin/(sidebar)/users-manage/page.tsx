@@ -3,7 +3,6 @@
 
 import { useContext, useState } from 'react'
 import { FaUsers } from 'react-icons/fa'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { AiOutlineReload } from 'react-icons/ai'
 import { AdminContext } from '@/context/AdminContext'
@@ -18,6 +17,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import axiosClient from '@/lib/axiosClient'
 
 const ManageUser = () => {
 
@@ -29,9 +29,9 @@ const ManageUser = () => {
         setLoading(true)
 
         try {
-            const { data } = await axios.delete(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/admin/delete-user", { data: { userId } })
+            const { data } = await axiosClient.delete(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/v1/users/delete-user/${userId}`)
 
-            if (data.success) {
+            if (data.statusCode === 200) {
                 toast.success('User deleted successfully')
                 getAllUser()
             }
