@@ -33,6 +33,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1', { exclude: [''] })
 
-  await app.listen(port);
+  await app.listen(port || 3000, '0.0.0.0');
 }
 bootstrap();
