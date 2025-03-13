@@ -14,7 +14,7 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
-  const port = configService.get('PORT');
+  const port = configService.get<number>('PORT') || 4000;
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
@@ -33,6 +33,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1', { exclude: [''] })
 
-  await app.listen(port || 3000, '0.0.0.0');
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();
