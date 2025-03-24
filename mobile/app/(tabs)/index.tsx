@@ -73,7 +73,7 @@ export default function Index() {
             <Image source={image1} style={{ width: 400, height: 400 }} />
             <View style={styles.textImage}>
               <Text style={{ fontSize: 30, fontWeight: 600, color: 'white' }}>Suiting Essentials</Text>
-              <Text style={{ textDecorationLine: 'underline', color: 'white' }}>SHOP NOW</Text>
+              <Text style={styles.text}>SHOP NOW</Text>
             </View>
           </View>
 
@@ -81,7 +81,7 @@ export default function Index() {
             <Image source={image2} style={{ width: 400, height: 400 }} />
             <View style={styles.textImage}>
               <Text style={{ fontSize: 30, fontWeight: 600, color: 'white' }}>Men&apos;s Suits & Tuxedos</Text>
-              <Text style={{ textDecorationLine: 'underline', color: 'white' }}>SHOP NOW</Text>
+              <Text style={styles.text}>SHOP NOW</Text>
             </View>
           </View>
 
@@ -89,7 +89,7 @@ export default function Index() {
             <Image source={image3} style={{ width: 400, height: 400 }} />
             <View style={styles.textImage}>
               <Text style={{ fontSize: 30, fontWeight: 600, color: 'white' }}>Prom & Homecoming</Text>
-              <Text style={{ textDecorationLine: 'underline', color: 'white' }}>SHOP NOW</Text>
+              <Text style={styles.text}>SHOP NOW</Text>
             </View>
           </View>
 
@@ -97,7 +97,7 @@ export default function Index() {
             <Image source={image4} style={{ width: 400, height: 400 }} />
             <View style={styles.textImage}>
               <Text style={{ fontSize: 30, fontWeight: 600, color: 'white' }}>Women&apos;s Suits & Tuxedos</Text>
-              <Text style={{ textDecorationLine: 'underline', color: 'white' }}>SHOP NOW</Text>
+              <Text style={styles.text}>SHOP NOW</Text>
             </View>
           </View>
         </View>

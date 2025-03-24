@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
         gap: 10,
         width: '100%',
         left: 15,
+    },
+    text: {
+        borderBottomWidth: 1,
+        borderColor: 'white',
+        paddingBottom: 10,
+        color: 'white'
     }
 });
 
