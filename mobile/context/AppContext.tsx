@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useEffect, useState } from "react"
 import * as Keychain from 'react-native-keychain';
 
-interface AdminContextType {
+interface AppContextType {
     token: string | false
     setToken: React.Dispatch<React.SetStateAction<string | false>>
 }
 
-export const AdminContext = createContext<AdminContextType>({
+export const AppContext = createContext<AppContextType>({
     token: false,
     setToken: () => { },
 })
@@ -15,13 +15,19 @@ interface AdminContextProviderProps {
     children: ReactNode
 }
 
-const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children }) => {
+const AppContextProvider: React.FC<AdminContextProviderProps> = ({ children }) => {
 
     const [token, setToken] = useState<string | false>(false)
 
     const loadToken = async () => {
-        const credentials = await Keychain.getGenericPassword();
-        if (credentials) setToken(credentials.password);
+        try {
+            const credentials = await Keychain.getGenericPassword();
+            if (credentials) {
+                setToken(credentials.password);
+            }
+        } catch (error) {
+            console.error("Error loading token:", error);
+        }
     }
 
     const value = {
@@ -33,10 +39,10 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     }, [])
 
     return (
-        <AdminContext.Provider value={value} >
+        <AppContext.Provider value={value} >
             {children}
-        </AdminContext.Provider>
+        </AppContext.Provider>
     )
 }
 
-export default AdminContextProvider
+export default AppContextProvider
