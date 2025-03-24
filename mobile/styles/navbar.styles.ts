@@ -22,14 +22,20 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'flex-end',
+    },
     drawerContainer: {
         position: 'absolute',
         top: 0,
         right: 0,
-        width: '60%',
+        width: '70%',
         height: '100%',
         backgroundColor: '#fff',
         padding: 16,
+        paddingVertical: 50,
         shadowColor: '#000',
         shadowOpacity: 0.2,
         shadowOffset: { width: -2, height: 0 },
@@ -39,5 +45,12 @@ export default StyleSheet.create({
         position: 'absolute',
         top: 16,
         right: 16,
+    },
+    expanded: {
+        flexDirection: 'column',
+        gap: 10,
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+        borderBottomColor: '#f0f0f0',
     },
 });

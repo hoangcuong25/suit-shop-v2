@@ -6,8 +6,8 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import styles from '@/styles/navbar.styles';
 
 export default function Navbar() {
-    const [active, setActive] = useState('');
     const [drawerVisible, setDrawerVisible] = useState(false);
+    const [expanded, setExpanded] = useState(false)
 
     return (
         <View style={styles.container}>
@@ -31,24 +31,55 @@ export default function Navbar() {
 
             {/* Drawer Modal */}
             <Modal visible={drawerVisible} animationType="slide" transparent={true}>
-                <View style={styles.drawerContainer}>
-                    <Drawer.Section title="Menu">
-                        <Drawer.Item
-                            label="First Item"
-                            active={active === 'first'}
-                            onPress={() => setActive('first')}
-                        />
-                        <Drawer.Item
-                            label="Second Item"
-                            active={active === 'second'}
-                            onPress={() => setActive('second')}
-                        />
-                    </Drawer.Section>
+                <View style={styles.overlay}>
+                    <View style={styles.drawerContainer}>
+                        <Drawer.Section style={{ flexDirection: 'column', gap: 20 }}>
+                            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Ionicons name="search-outline" size={20} color="black" />
+                                <Text style={{ fontSize: 16 }}>Search</Text>
+                            </View>
 
-                    {/* Nút đóng Drawer */}
-                    <TouchableOpacity onPress={() => setDrawerVisible(false)} style={styles.closeDrawer}>
-                        <Ionicons name="close" size={26} color="black" />
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.expanded} onPress={() => setExpanded(!expanded)}>
+                                <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Text style={{ fontSize: 16 }}>Shop</Text>
+                                    <SimpleLineIcons name="arrow-down" size={13} color="black" />
+                                </View>
+
+                                {expanded && (
+                                    <View style={{ flexDirection: 'column', gap: 15, marginTop: 10 }}>
+                                        <Text>Occasions</Text>
+                                        <Text>SuitShop Specials</Text>
+                                        <Text>Suits & Tuxedos</Text>
+                                        <Text>Separates</Text>
+                                        <Text>Occasions</Text>
+                                        <Text>Accessories</Text>
+                                        <Text>Gifts & Extras</Text>
+                                    </View>
+                                )}
+                            </TouchableOpacity>
+
+                            <View>
+                                <Text style={{ fontSize: 16 }}>Get Started</Text>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 16 }}>Fit Guide</Text>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 16 }}>Contact Us</Text>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 16 }}>Location</Text>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 16 }}>Help</Text>
+                            </View>
+                        </Drawer.Section>
+
+                        {/* Nút đóng Drawer */}
+                        <TouchableOpacity onPress={() => setDrawerVisible(false)} style={styles.closeDrawer}>
+                            <Ionicons name="close" size={23} color="black" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Modal>
         </View>
