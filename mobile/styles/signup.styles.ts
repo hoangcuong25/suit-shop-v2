@@ -16,6 +16,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingHorizontal: 5,
     },
+    inputHalf: {
+        width: 140,
+        height: 35,
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        fontSize: 16,
+        paddingHorizontal: 5,
+    },
     paswwrod: {
         position: 'absolute',
         right: 0,
@@ -36,28 +44,6 @@ const styles = StyleSheet.create({
         color: '#007AFF',
         marginTop: 5,
         textDecorationLine: 'underline',
-    },
-    loginGoogle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        width: 300,
-        height: 60,
-        marginVertical: 15
-    },
-    logo: {
-        width: 35,
-        height: 35,
     },
 });
 

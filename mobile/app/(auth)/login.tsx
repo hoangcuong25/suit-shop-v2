@@ -16,11 +16,16 @@ export default function Login() {
 
     return (
         <View style={styles.container}>
+            <View style={{ position: 'absolute', top: 0, left: 15 }}>
+                <Pressable onPress={() => router.replace('/(tabs)')}>
+                    <AntDesign name="arrowleft" size={26} color="black" />
+                </Pressable>
+            </View>
             <Text style={{ fontSize: 30 }}>
                 <Text style={{ fontWeight: '600' }}>SUIT </Text>SHOP
             </Text>
 
-            <Text style={{ fontSize: 20, marginTop: 18 }}>login</Text>
+            <Text style={{ fontSize: 20, marginTop: 10 }}>login</Text>
 
             <View style={{ marginTop: 15 }}>
                 <Text style={{ fontSize: 18 }}>Email:</Text>
@@ -77,7 +82,7 @@ export default function Login() {
                 <Text>New member?</Text>
                 <Text>Become a member of SUIT SHOP</Text>
                 <Text>to receive amazing offers and services</Text>
-                <Pressable onPress={() => router.push('/signup')}>
+                <Pressable onPress={() => router.push('/(auth)/signup')}>
                     <Text style={styles.signup}>Sign up</Text>
                 </Pressable>
             </View>
