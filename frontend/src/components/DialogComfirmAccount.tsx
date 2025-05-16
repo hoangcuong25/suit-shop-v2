@@ -16,7 +16,7 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { Button } from './ui/button'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import axiosClient from '@/lib/axiosClient'
 
 const DialogComfirmAccount = () => {

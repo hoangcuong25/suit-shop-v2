@@ -6,7 +6,7 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { AiOutlineReload } from 'react-icons/ai';
 import { useRouter } from 'next/navigation'
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import axiosClient from '@/lib/axiosClient';
 
 const UserRegiserForm = () => {

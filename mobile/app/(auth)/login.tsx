@@ -4,6 +4,7 @@ import styles from '@/styles/login.styles'
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import axiosClient from '@/lib/axiosClient';
 
 export default function Login() {
 
@@ -13,6 +14,33 @@ export default function Login() {
     const [isShow, setIsShow] = useState<boolean>(false)
 
     const router = useRouter()
+
+    const login = async (e: React.FormEvent): Promise<void> => {
+        e.preventDefault()
+        setIsLoading(true)
+
+        try {
+            const { data } = await axiosClient.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/v1/auth/login', { email, password })
+
+            // if (data.statusCode === 201) {
+            //     setToken(data.dataRes.access_token)
+
+            //     const decoded: { role: string } = jwtDecode(data.dataRes.access_token)
+            //     if (decoded.role === 'admin') {
+            //         router.push('/admin/dashboard')
+            //         scrollTo(0, 0)
+            //     } else {
+            //         router.push('/')
+            //         scrollTo(0, 0)
+            //     }
+            // }
+
+        } catch {
+            console.log('Incorrect email or password')
+        }
+
+        setIsLoading(false)
+    }
 
     return (
         <View style={styles.container}>

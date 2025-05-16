@@ -8,7 +8,7 @@ import { MdLocalPhone } from "react-icons/md";
 import { IoMdLock } from "react-icons/io";
 import { FaFacebook, FaRegWindowClose } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { AiOutlineMenu, AiOutlineReload } from "react-icons/ai";
 import Image from 'next/image';
 import { AppContext } from '@/context/AppContext';

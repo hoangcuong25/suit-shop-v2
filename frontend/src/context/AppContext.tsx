@@ -5,7 +5,7 @@
 import axiosClient from "@/lib/axiosClient";
 import { useRouter } from "next/navigation";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 interface AppContextType {
     token: string | false

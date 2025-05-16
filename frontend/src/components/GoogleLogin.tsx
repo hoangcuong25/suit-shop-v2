@@ -4,7 +4,7 @@ import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import app from "@/firebase.js"
 import { FcGoogle } from "react-icons/fc"
 import { useContext } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { AppContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
 import axiosClient from '@/lib/axiosClient';

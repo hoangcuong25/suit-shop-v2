@@ -24,7 +24,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FaRegHeart } from "react-icons/fa";

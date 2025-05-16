@@ -3,7 +3,7 @@
 
 import { useContext, useState } from 'react'
 import { FaUsers } from 'react-icons/fa'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { AiOutlineReload } from 'react-icons/ai'
 import { AdminContext } from '@/context/AdminContext'
 import {

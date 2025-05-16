@@ -4,7 +4,7 @@
 import React, { useContext, useState } from 'react'
 import { FaRegWindowClose, FaShoppingBasket } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { AiOutlineMenu, AiOutlineReload } from 'react-icons/ai';
 import { AppContext } from '@/context/AppContext';
 import Image from 'next/image';

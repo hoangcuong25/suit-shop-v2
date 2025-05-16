@@ -2,7 +2,7 @@
 
 import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { AppContext } from '@/context/AppContext';
 import axiosClient from '@/lib/axiosClient';
 import { FaRegEyeSlash } from "react-icons/fa";

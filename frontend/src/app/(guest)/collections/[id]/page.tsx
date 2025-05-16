@@ -11,7 +11,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { AppContext } from '@/context/AppContext';

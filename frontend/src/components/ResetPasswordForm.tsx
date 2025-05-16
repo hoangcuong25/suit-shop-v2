@@ -3,7 +3,7 @@
 
 import { useRef, useState } from 'react'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 

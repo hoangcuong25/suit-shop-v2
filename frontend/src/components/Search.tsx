@@ -10,7 +10,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { CiSearch } from 'react-icons/ci'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { TiDeleteOutline } from 'react-icons/ti'
 import Image from 'next/image'
 import axiosClient from '@/lib/axiosClient'

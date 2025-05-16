@@ -8,7 +8,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { AppContext } from '@/context/AppContext';
 import { CiDiscount1 } from "react-icons/ci";
 import { Button } from './ui/button';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import axiosClient from '@/lib/axiosClient';
 
 type Props = {

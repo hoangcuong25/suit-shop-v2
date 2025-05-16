@@ -6,7 +6,7 @@ import { useContext, useState } from 'react'
 import { FaTruck } from "react-icons/fa";
 import { IoIosWallet } from "react-icons/io";
 import { IoIosPricetags } from "react-icons/io";
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { AppContext } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';

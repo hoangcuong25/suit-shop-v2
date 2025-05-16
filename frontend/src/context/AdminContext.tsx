@@ -2,7 +2,7 @@
 'use client'
 
 import { ReactNode, useEffect, useState } from "react"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { createContext } from "react"
 import axiosClient from "@/lib/axiosClient"
 
