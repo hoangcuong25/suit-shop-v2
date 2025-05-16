@@ -17,7 +17,7 @@ import WishList from '@/components/WishList';
 import TrackOrder from '@/components/TrackOrder';
 import Interested from '@/components/interestingProducts';
 import axiosClient from '@/lib/axiosClient';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const WrapMyProfile = () => {
 
